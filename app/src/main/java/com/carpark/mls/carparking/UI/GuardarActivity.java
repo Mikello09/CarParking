@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -50,15 +51,14 @@ import java.io.File;
 
 public class GuardarActivity extends AppCompatActivity implements OnMapReadyCallback, DialogInterface {
 
-    private GoogleMap map;
-    private LinearLayout guardar;
-    private EditText descripcion;
-    private Button anadirLocation;
 
-    //GPS VARS
+    //MAPA VARS
     private LocationManager mLocationManager;
     private final long LOCATION_REFRESH_TIME = 1;
     private final float LOCATION_REFRESH_DISTANCE = 10;
+    private GoogleMap map;
+    private LinearLayout mapaImagen;
+    private LinearLayout mapaDetalles;
 
     //DETALLES VARS
     private LinearLayout anadirDetallasImagen;
@@ -112,7 +112,11 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         anadirFotoLayout = (LinearLayout)findViewById(R.id.fotoLayoutImagen);
         fotoLayoutDetalles = (LinearLayout)findViewById(R.id.fotoLayoutDetalles);
         foto = (ImageView)findViewById(R.id.foto);
+        mapaImagen = (LinearLayout)findViewById(R.id.mapaLayoutImagen);
+        mapaDetalles = (LinearLayout)findViewById(R.id.mapaLayoutDetalles);
 
+    }
+    public void configureMapa(){
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapa);
@@ -183,6 +187,14 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
             }
         });
+        mapaImagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                permisoLocalizacion();
+
+            }
+        });
 
     }
     private void sacarFoto(){
@@ -212,12 +224,34 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             }
         }
     }
+    private void permisoLocalizacion(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                mapaImagen.setVisibility(View.GONE);
+                mapaDetalles.setVisibility(View.VISIBLE);
+                configureMapa();
+
+            } else {
+
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+            }
+        }
+
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == 100){
             sacarFoto();
+        }
+        if(requestCode == 200){
+
+            mapaImagen.setVisibility(View.GONE);
+            mapaDetalles.setVisibility(View.VISIBLE);
+            configureMapa();
         }
     }
     @Override
@@ -296,15 +330,51 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 
-        /*mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME,
-                LOCATION_REFRESH_DISTANCE, mLocationListener);*/
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
 
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        map.addMarker(new MarkerOptions().position(sydney)
-                .title("Tu coche"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        Toast.makeText(GuardarActivity.this,"MAPAREADY",Toast.LENGTH_SHORT).show();
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled || !network_enabled){
+
+            Dialog.dialogoGPS(GuardarActivity.this);
+
+        }else{
+            try{
+
+                map.setMyLocationEnabled(true);
+
+                if (map != null) {
+
+
+                    map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+
+                        @Override
+                        public void onMyLocationChange(Location arg0) {
+
+                            LatLng carLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
+                            map.addMarker(new MarkerOptions().position(new LatLng(arg0.getLatitude(), arg0.getLongitude()))
+                                    .title("Mi coche"));
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(carLocation, 16.0f));
+                            //map.moveCamera(CameraUpdateFactory.newLatLng(carLocation));
+
+                        }
+                    });
+                }
+            }catch(SecurityException e){
+
+                //NO HAY PERMISO
+            }
+        }
+
     }
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -368,5 +438,12 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         anadirFotoLayout.setVisibility(View.VISIBLE);
         rotatedBitmap = null;
         permisoFoto();
+    }
+
+    @Override
+    public void esconderMapa() {
+
+        mapaDetalles.setVisibility(View.GONE);
+        mapaImagen.setVisibility(View.VISIBLE);
     }
 }

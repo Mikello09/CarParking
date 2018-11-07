@@ -10,4 +10,6 @@ public interface DialogInterface {
 
      void cambiarFoto();
 
+     void esconderMapa();
+
 }

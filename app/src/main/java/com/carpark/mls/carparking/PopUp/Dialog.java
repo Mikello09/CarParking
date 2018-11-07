@@ -320,6 +320,29 @@ public class Dialog
         dialog.show();
 
     }
+    public static void dialogoGPS(Context context){
+
+        final DialogInterface interfazGps = (DialogInterface) context;
+
+        final android.app.Dialog dialog = new android.app.Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.gps_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
+
+        TextView entendido = (TextView)dialog.findViewById(R.id.entendidoText);
+
+        entendido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                interfazGps.esconderMapa();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
     public static String seleccionar(Context context, LinearLayout[] bordes, TextView[] checks, String color){
 
         for(int i=0;i<colores.length;i++){
