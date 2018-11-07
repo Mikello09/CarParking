@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CarParking</string>
+
+    <string name="eliminar_icono">&#xf55a;</string>
+    <string name="aceptar_icono">&#xf058;</string>
+    <string name="check_icono">&#xf00c;</string>
+
 </resources>

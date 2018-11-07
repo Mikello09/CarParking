@@ -5,4 +5,19 @@
     <color name="colorAccent">#4CB4FF</color>
     <color name="colorTexto">#FFFFFF</color>
     <color name="fondo">#fafafa</color>
+    <color name="texto_color">#7D7D7D</color>
+    <color name="texto_seleccionado">#04B431</color>
+    <color name="eliminar_color">#DF0101</color>
+
+
+    <color name="negro">#000000</color>
+    <color name="azul">#4CB4FF</color>
+    <color name="amarillo">#FFFF00</color>
+    <color name="rojo">#DF0101</color>
+    <color name="blanco">#FFFFFF</color>
+    <color name="morado">#7401DF</color>
+    <color name="marron">#8A4B08</color>
+    <color name="verde">#04B431</color>
+    <color name="gris">#7D7D7D</color>
+
 </resources>
