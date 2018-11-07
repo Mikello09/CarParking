@@ -8,4 +8,6 @@ public interface DialogInterface {
 
      void ingresarMasDetalles(String detalles);
 
+     void cambiarFoto();
+
 }

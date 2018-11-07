@@ -1,15 +1,25 @@
 package com.carpark.mls.carparking.UI;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.ExifInterface;
+import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +28,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +75,13 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     //FOTO VARS
     private LinearLayout anadirFotoLayout;
     private static int RESULT_IMAGE_CLICK = 1;
+    private LinearLayout fotoLayoutDetalles;
+    private ImageView foto;
+    private Uri imageUri;
+    private Bitmap rotatedBitmap = null;
 
+    //ANIMATIONS
+    private Animation fadein;
 
 
     @Override
@@ -81,6 +98,8 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     }
     public void onBind(){
 
+        fadein = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+
         pisoLayout = (LinearLayout)findViewById(R.id.pisoLayout);
         plazaLayout = (LinearLayout)findViewById(R.id.plazaLayout);
         coloresLayout = (LinearLayout)findViewById(R.id.colorLayout);
@@ -90,7 +109,9 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         anadirDetallasImagen = (LinearLayout)findViewById(R.id.anadirDetallesImagen);
         anadirDetallesTexto = (LinearLayout)findViewById(R.id.anadirDetallesTexto);
         masDetallesTexto = (TextView)findViewById(R.id.masDetallesTexto);
-        anadirFotoLayout = (LinearLayout)findViewById(R.id.fotoLayout);
+        anadirFotoLayout = (LinearLayout)findViewById(R.id.fotoLayoutImagen);
+        fotoLayoutDetalles = (LinearLayout)findViewById(R.id.fotoLayoutDetalles);
+        foto = (ImageView)findViewById(R.id.foto);
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -103,13 +124,19 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         pisoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog.dialogoTeclado(GuardarActivity.this,"piso");
+                if(!piso.getText().toString().equals("-"))
+                    Dialog.dialogoTeclado(GuardarActivity.this,"piso",piso.getText().toString());
+                else
+                    Dialog.dialogoTeclado(GuardarActivity.this,"piso","");
             }
         });
         plazaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog.dialogoTeclado(GuardarActivity.this,"plaza");
+                if(!plaza.getText().toString().equals("-"))
+                    Dialog.dialogoTeclado(GuardarActivity.this,"plaza",plaza.getText().toString());
+                else
+                    Dialog.dialogoTeclado(GuardarActivity.this,"plaza","");
             }
         });
         coloresLayout.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +148,6 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         anadirDetallasImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation fadein = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 
                 anadirDetallasImagen.setVisibility(View.GONE);
                 anadirDetallesTexto.setVisibility(View.VISIBLE);
@@ -145,12 +171,54 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, RESULT_IMAGE_CLICK);
+                permisoFoto();
+
+            }
+        });
+        fotoLayoutDetalles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Dialog.dialogoFoto(GuardarActivity.this, rotatedBitmap);
+
             }
         });
 
+    }
+    private void sacarFoto(){
 
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "Foto");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "Foto CarParking");
+        imageUri = getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, RESULT_IMAGE_CLICK);
+
+    }
+    private void permisoFoto(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                sacarFoto();
+
+            } else {
+
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+            }
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 100){
+            sacarFoto();
+        }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -158,14 +226,67 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         if (resultCode == RESULT_OK) {
             if (requestCode == RESULT_IMAGE_CLICK) {
 
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                //imageView.setImageBitmap(photo);
+                try {
+
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+
+                    ExifInterface ei = new ExifInterface(getRealPathFromURI(imageUri));
+                    int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_UNDEFINED);
+
+
+                    switch(orientation) {
+
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            rotatedBitmap = rotateImage(bitmap, 90);
+                            break;
+
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            rotatedBitmap = rotateImage(bitmap, 180);
+                            break;
+
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            rotatedBitmap = rotateImage(bitmap, 270);
+                            break;
+
+                        case ExifInterface.ORIENTATION_NORMAL:
+                        default:
+                            rotatedBitmap = bitmap;
+                    }
+
+                    foto.setImageBitmap(rotatedBitmap);
+                    anadirFotoLayout.setVisibility(View.GONE);
+                    fotoLayoutDetalles.setVisibility(View.VISIBLE);
+                    fotoLayoutDetalles.startAnimation(fadein);
+
+                } catch (Exception e) {
+
+                    fotoLayoutDetalles.setVisibility(View.GONE);
+                    anadirFotoLayout.setVisibility(View.VISIBLE);
+
+                }
             }
         }else{
-            //SHOW ERRROR
+
+            fotoLayoutDetalles.setVisibility(View.GONE);
+            anadirFotoLayout.setVisibility(View.VISIBLE);
+
         }
     }
-
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // Add a marker in Sydney, Australia,
@@ -238,5 +359,14 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void ingresarMasDetalles(String detalles) {
         masDetallesTexto.setText(detalles);
+    }
+
+    @Override
+    public void cambiarFoto() {
+
+        fotoLayoutDetalles.setVisibility(View.GONE);
+        anadirFotoLayout.setVisibility(View.VISIBLE);
+        rotatedBitmap = null;
+        permisoFoto();
     }
 }

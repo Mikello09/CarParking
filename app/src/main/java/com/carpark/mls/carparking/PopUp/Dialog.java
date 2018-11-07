@@ -1,12 +1,14 @@
 package com.carpark.mls.carparking.PopUp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,7 +28,7 @@ public class Dialog
     public static String colorSeleccionado = "";
 
 
-    public static void dialogoTeclado(Context context, final String tipo){
+    public static void dialogoTeclado(Context context, final String tipo, String numero){
 
         final DialogInterface interfazNumero = (DialogInterface) context;
 
@@ -131,12 +133,18 @@ public class Dialog
             }
         });
 
+        texto.setText(numero);
+
         eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(texto.getText().toString() != "") {
-                    texto.setText(texto.getText().toString().substring(0, texto.getText().toString().length() - 1));
-                }else{
+                try {
+                    if (texto.getText().toString() != "") {
+                        texto.setText(texto.getText().toString().substring(0, texto.getText().toString().length() - 1));
+                    } else {
+                        dialog.dismiss();
+                    }
+                }catch (Exception e){
                     dialog.dismiss();
                 }
             }
@@ -285,6 +293,33 @@ public class Dialog
         dialog.show();
 
     }
+    public static void dialogoFoto(Context context, Bitmap foto){
+
+        final DialogInterface interfazFoto = (DialogInterface) context;
+
+        final android.app.Dialog dialog = new android.app.Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.foto_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
+
+        ImageView fotoImage = (ImageView)dialog.findViewById(R.id.fotoDialog);
+        TextView cambiarFotoLayout = (TextView) dialog.findViewById(R.id.cambiarFotoTexto);
+
+        fotoImage.setImageBitmap(foto);
+
+        cambiarFotoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                interfazFoto.cambiarFoto();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
     public static String seleccionar(Context context, LinearLayout[] bordes, TextView[] checks, String color){
 
         for(int i=0;i<colores.length;i++){
@@ -319,6 +354,7 @@ public class Dialog
 
         final EditText detalles = (EditText) dialog.findViewById(R.id.detallesTexto);
         TextView acpetar = (TextView)dialog.findViewById(R.id.aceptar_detalles);
+
 
         detalles.setText(texto);
         detalles.setSelection(detalles.getText().length());
