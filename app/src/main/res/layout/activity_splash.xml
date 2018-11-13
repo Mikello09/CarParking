@@ -4,39 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:textAlignment="center"
     android:background="@color/fondo"
     tools:context=".UI.SplashActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="APPARCA"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp"
-        android:id="@+id/titulo_text_splash"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        android:textColor="@color/azul"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/azul"
-        android:layout_alignBottom="@id/titulo_text_splash"
-        android:layout_marginTop="5dp"></LinearLayout>
+
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="100dp"
-        android:layout_height="4dp"
+        android:layout_height="2dp"
         android:max="100"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_alignTop="@id/codebounds_text_splash"
         android:progress="0"
         android:progressDrawable="@drawable/custom_progress_bar"
         android:id="@+id/espera"/>
@@ -47,6 +27,7 @@
         android:text="CodeBounds"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/codebounds_text_splash"
         android:textSize="20dp"

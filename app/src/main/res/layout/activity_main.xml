@@ -19,10 +19,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1"
         android:id="@+id/titulo_layout"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:gravity="center">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/coche_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,35 +35,11 @@
             android:textSize="30dp"
             android:textStyle="bold"
             android:textColor="@color/blanco"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_margin="15dp">
-            <LinearLayout
-                android:layout_width="140dp"
-                android:layout_height="1dp"
-                android:background="@color/blanco"></LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Codebounds"
-                android:id="@+id/codebounds_text"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
-                android:textSize="8dp"
-                android:textColor="@color/blanco"/>
-            <LinearLayout
-                android:layout_width="140dp"
-                android:layout_height="1dp"
-                android:background="@color/blanco"></LinearLayout>
-        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.3"
+        android:layout_weight="0.4"
         android:background="@drawable/shadow_view_info"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
@@ -69,7 +49,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.4"
         android:id="@+id/botones_layout">
         <LinearLayout
             android:layout_width="0dp"
@@ -130,10 +110,37 @@
                     android:text="Aparcar mi coche"
                     android:textStyle="bold"/>
             </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_margin="15dp">
+            <LinearLayout
+                android:layout_width="140dp"
+                android:layout_height="1dp"
+                android:background="@color/blanco"></LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Codebounds"
+                android:id="@+id/codebounds_text"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:textSize="10dp"
+                android:textColor="@color/blanco"/>
+            <LinearLayout
+                android:layout_width="140dp"
+                android:layout_height="1dp"
+                android:background="@color/blanco"></LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 </FrameLayout>

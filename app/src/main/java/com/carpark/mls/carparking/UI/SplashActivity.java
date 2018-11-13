@@ -13,7 +13,6 @@ import com.carpark.mls.carparking.R;
 public class SplashActivity extends AppCompatActivity {
 
     private ProgressBar espera;
-    private TextView titulo;
     private TextView codebounds;
 
     @Override
@@ -30,12 +29,10 @@ public class SplashActivity extends AppCompatActivity {
     public void onBind(){
 
         espera = (ProgressBar)findViewById(R.id.espera);
-        titulo = (TextView)findViewById(R.id.titulo_text_splash);
         codebounds = (TextView)findViewById(R.id.codebounds_text_splash);
 
         espera.setProgress(0);
 
-        titulo.setTypeface(Utils.setFont(SplashActivity.this,"playfair",false));
         codebounds.setTypeface(Utils.setFont(SplashActivity.this,"sofia",false));
 
     }
