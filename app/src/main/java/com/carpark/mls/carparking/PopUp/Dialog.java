@@ -68,8 +68,8 @@ public class Dialog
                 break;
         }
 
-        eliminarIcono.setTypeface(Utils.setFont(context,"fontawesome"));
-        aceptarIcono.setTypeface(Utils.setFont(context,"fontawesome"));
+        eliminarIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
+        aceptarIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
 
 
         uno.setOnClickListener(new View.OnClickListener() {
@@ -205,15 +205,15 @@ public class Dialog
         final LinearLayout[] bordes = {bordeNegro,bordeAzul,bordeRojo,bordeVerde,bordeAmarillo,bordeMorado,bordeMarron,bordeBlanco,bordeGris};
         final TextView[] checks = {checkNegro,checkAzul,checkRojo,checkVerde,checkAmarillo,checkMorado,checkMarron,checkBlanco,checkGris};
 
-        checkNegro.setTypeface(Utils.setFont(context,"fontawesome"));
-        checkAzul.setTypeface(Utils.setFont(context,"fontawesome"));
-        checkRojo.setTypeface(Utils.setFont(context,"fontawesome"));
-        checkVerde.setTypeface(Utils.setFont(context,"fontawesome"));
-        checkAmarillo.setTypeface(Utils.setFont(context,"fontawesome"));
-        checkMorado.setTypeface(Utils.setFont(context,"fontawesome"));
-        checkMarron.setTypeface(Utils.setFont(context,"fontawesome"));
-        checkBlanco.setTypeface(Utils.setFont(context,"fontawesome"));
-        checkGris.setTypeface(Utils.setFont(context,"fontawesome"));
+        checkNegro.setTypeface(Utils.setFont(context,"fontawesome",true));
+        checkAzul.setTypeface(Utils.setFont(context,"fontawesome",true));
+        checkRojo.setTypeface(Utils.setFont(context,"fontawesome",true));
+        checkVerde.setTypeface(Utils.setFont(context,"fontawesome",true));
+        checkAmarillo.setTypeface(Utils.setFont(context,"fontawesome",true));
+        checkMorado.setTypeface(Utils.setFont(context,"fontawesome",true));
+        checkMarron.setTypeface(Utils.setFont(context,"fontawesome",true));
+        checkBlanco.setTypeface(Utils.setFont(context,"fontawesome",true));
+        checkGris.setTypeface(Utils.setFont(context,"fontawesome",true));
 
         colorSeleccionado = seleccionar(context,bordes,checks,color);
 
