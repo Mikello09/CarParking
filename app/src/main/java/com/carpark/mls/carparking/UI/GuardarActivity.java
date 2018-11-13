@@ -89,11 +89,8 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guardar);
 
-
         onBind();
         listeners();
-
-
 
     }
     public void onBind(){
