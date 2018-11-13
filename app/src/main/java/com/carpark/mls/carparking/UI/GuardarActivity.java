@@ -24,6 +24,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -34,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carpark.mls.carparking.AppConfig.Navigator;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.Interfaces.DialogInterface;
 import com.carpark.mls.carparking.PopUp.Dialog;
@@ -88,6 +90,8 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guardar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Aparcar mi coche");
 
         onBind();
         listeners();
@@ -113,6 +117,14 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         mapaDetalles = (LinearLayout)findViewById(R.id.mapaLayoutDetalles);
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Navigator.NavigateToMain(GuardarActivity.this);
+        return true;
+    }
+
     public void configureMapa(){
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
