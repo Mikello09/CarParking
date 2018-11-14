@@ -15,6 +15,8 @@ public class SplashActivity extends AppCompatActivity {
     private ProgressBar espera;
     private TextView codebounds;
 
+    private int progreso = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         getSupportActionBar().hide();//Eliminar barra superior
 
         onBind();
-        esperaHandler25();
+        esperaHandler();
 
 
     }
@@ -36,41 +38,73 @@ public class SplashActivity extends AppCompatActivity {
         codebounds.setTypeface(Utils.setFont(SplashActivity.this,"sofia",false));
 
     }
-    public void esperaHandler25(){
+    public void esperaHandler(){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                espera.setProgress(25);
-                esperaHandler50();
+                rellenarProgreso();
             }
-        }, 500);
+        }, 20);
     }
-    public void esperaHandler50(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                espera.setProgress(50);
-                esperaHandler75();
-            }
-        }, 500);
-    }
-    public void esperaHandler75(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                espera.setProgress(75);
-                esperaHandler100();
-            }
-        }, 500);
-    }
-    public void esperaHandler100(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                espera.setProgress(100);
-                goToMain();
-            }
-        }, 500);
+    public void rellenarProgreso(){
+
+
+        if(progreso > 100){
+            goToMain();
+        }else{
+            espera.setProgress(progreso);
+            progreso += 1;
+            esperaHandler();
+        }
+
+
+
+        /*switch (progreso){
+            case 0:
+
+            case 5:
+
+                break;
+            case 10:
+                break;
+            case 15:
+                break;
+            case 20:
+                break;
+            case 25:
+                break;
+            case 30:
+                break;
+            case 35:
+                break;
+            case 40:
+                break;
+            case 45:
+                break;
+            case 50:
+                break;
+            case 55:
+                break;
+            case 60:
+                break;
+            case 65:
+                break;
+            case 70:
+                break;
+            case 75:
+                break;
+            case 80:
+                break;
+            case 85:
+                break;
+            case 90:
+                break;
+            case 95:
+                break;
+            case 100:
+                break;
+
+        }*/
     }
     public void goToMain(){
         Navigator.NavigateToMain(SplashActivity.this);
