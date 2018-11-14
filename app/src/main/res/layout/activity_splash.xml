@@ -8,6 +8,13 @@
     tools:context=".UI.SplashActivity">
 
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/coche_icon"
+        android:id="@+id/carIcono"/>
 
 
     <ProgressBar

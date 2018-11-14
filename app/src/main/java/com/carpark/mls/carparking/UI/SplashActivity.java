@@ -3,6 +3,9 @@ package com.carpark.mls.carparking.UI;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -14,8 +17,12 @@ public class SplashActivity extends AppCompatActivity {
 
     private ProgressBar espera;
     private TextView codebounds;
+    private ImageView carIcono;
 
     private int progreso = 0;
+
+    //ANIMATIONS
+    private Animation fadein;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +37,18 @@ public class SplashActivity extends AppCompatActivity {
     }
     public void onBind(){
 
+        fadein = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_splash);
+
+
         espera = (ProgressBar)findViewById(R.id.espera);
         codebounds = (TextView)findViewById(R.id.codebounds_text_splash);
+        carIcono = (ImageView)findViewById(R.id.carIcono);
 
         espera.setProgress(0);
 
         codebounds.setTypeface(Utils.setFont(SplashActivity.this,"sofia",false));
+
+        carIcono.startAnimation(fadein);
 
     }
     public void esperaHandler(){
