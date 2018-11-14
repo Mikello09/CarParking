@@ -9,7 +9,7 @@ import java.util.List;
 
 public class DBOperations {
 
-    public void addCoche(Context context, String piso, String plaza, String color, byte[] foto, String latitud, String longitud){
+    public static void addCoche(Context context, String piso, String plaza, String color, byte[] foto, String latitud, String longitud){
 
         SQLHelper dbHelper = new SQLHelper(context);
         SQLiteDatabase database = dbHelper.getWritableDatabase();

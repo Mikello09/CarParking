@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.carpark.mls.carparking.AppConfig.Navigator;
 import com.carpark.mls.carparking.AppConfig.Utils;
+import com.carpark.mls.carparking.BD.DBOperations;
 import com.carpark.mls.carparking.Interfaces.DialogInterface;
 import com.carpark.mls.carparking.PopUp.Dialog;
 import com.carpark.mls.carparking.R;
@@ -49,6 +50,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.vision.text.Line;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class GuardarActivity extends AppCompatActivity implements OnMapReadyCallback, DialogInterface {
@@ -85,6 +87,11 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     //ANIMATIONS
     private Animation fadein;
 
+    //GUARDAR
+    private LinearLayout guardarLayout;
+    private Double lastLatitude = 0.0;
+    private Double lastLongitude = 0.0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +122,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         foto = (ImageView)findViewById(R.id.foto);
         mapaImagen = (LinearLayout)findViewById(R.id.mapaLayoutImagen);
         mapaDetalles = (LinearLayout)findViewById(R.id.mapaLayoutDetalles);
+        guardarLayout = (LinearLayout)findViewById(R.id.guardarLayout);
 
     }
 
@@ -204,6 +212,31 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
             }
         });
+        guardarLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                guardar();
+
+            }
+        });
+
+    }
+    public void guardar(){
+
+        byte[] imageToDB = null;
+        if(rotatedBitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 90, baos);
+            imageToDB = baos.toByteArray();
+        }
+
+        DBOperations.addCoche(GuardarActivity.this,piso.getText().toString(),
+                                plaza.getText().toString(),
+                                selectedColor,
+                                imageToDB,
+                                Double.toString(lastLatitude),
+                                Double.toString(lastLongitude));
 
     }
     private void sacarFoto(){
@@ -369,9 +402,12 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                         @Override
                         public void onMyLocationChange(Location arg0) {
 
-                            LatLng carLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
+                            lastLatitude = arg0.getLatitude();
+                            lastLongitude = arg0.getLongitude();
+
+                            LatLng carLocation = new LatLng(lastLatitude, lastLongitude);
                             map.clear();
-                            map.addMarker(new MarkerOptions().position(new LatLng(arg0.getLatitude(), arg0.getLongitude()))
+                            map.addMarker(new MarkerOptions().position(carLocation)
                                     .title("Mi coche"));
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(carLocation, 16.0f));
                             //map.moveCamera(CameraUpdateFactory.newLatLng(carLocation));
