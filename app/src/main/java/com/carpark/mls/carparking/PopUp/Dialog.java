@@ -152,9 +152,17 @@ public class Dialog
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!texto.getText().toString().equals("") || texto.getText().toString() != null)
-                    interfazNumero.seleccionarNumero(tipo,Integer.parseInt(texto.getText().toString()));
-                dialog.dismiss();
+                try {
+                    if (!texto.getText().toString().equals("") || texto.getText().toString() != null) {
+                        interfazNumero.seleccionarNumero(tipo, Integer.parseInt(texto.getText().toString()));
+                    }else{
+                        interfazNumero.seleccionarNumero(tipo, -1992);
+                    }
+                    dialog.dismiss();
+                }catch (Exception e){
+                    interfazNumero.seleccionarNumero(tipo, -1992);
+                    dialog.dismiss();
+                }
             }
         });
         dialog.show();

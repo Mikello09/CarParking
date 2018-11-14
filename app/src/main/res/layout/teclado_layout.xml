@@ -22,7 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.1"
-        android:layout_margin="3dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
         android:background="@drawable/round_item"
         android:gravity="center">
         <TextView
@@ -48,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:id="@+id/uno"
-                android:layout_margin="3dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/shadow_item"
                 android:gravity="center">
                 <TextView
@@ -64,7 +67,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:id="@+id/dos"
-                android:layout_margin="3dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/shadow_item"
                 android:gravity="center">
                 <TextView
@@ -80,7 +83,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:id="@+id/tres"
-                android:layout_margin="3dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/shadow_item"
                 android:gravity="center">
                 <TextView
@@ -102,7 +105,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:id="@+id/cuatro"
-                android:layout_margin="3dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/shadow_item"
                 android:gravity="center">
                 <TextView
@@ -118,7 +121,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:id="@+id/cinco"
-                android:layout_margin="3dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/shadow_item"
                 android:gravity="center">
                 <TextView
@@ -134,7 +137,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:id="@+id/seis"
-                android:layout_margin="3dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/shadow_item"
                 android:gravity="center">
                 <TextView
@@ -156,7 +159,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:id="@+id/siete"
-                android:layout_margin="3dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/shadow_item"
                 android:gravity="center">
                 <TextView
@@ -172,7 +175,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:id="@+id/ocho"
-                android:layout_margin="3dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/shadow_item"
                 android:gravity="center">
                 <TextView
@@ -188,7 +191,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:id="@+id/nueve"
-                android:layout_margin="3dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/shadow_item"
                 android:gravity="center">
                 <TextView
@@ -211,7 +214,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.33"
             android:gravity="center"
-            android:layout_margin="3dp"
+            android:layout_margin="10dp"
             android:background="@drawable/shadow_item"
             android:id="@+id/eliminar_layout">
             <TextView
@@ -228,7 +231,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.33"
             android:gravity="center"
-            android:layout_margin="3dp"
+            android:layout_margin="10dp"
             android:background="@drawable/shadow_item"
             android:id="@+id/cero">
             <TextView
@@ -244,7 +247,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.33"
             android:gravity="center"
-            android:layout_margin="3dp"
+            android:layout_margin="10dp"
             android:background="@drawable/shadow_item"
             android:id="@+id/aceptarLayout">
             <TextView

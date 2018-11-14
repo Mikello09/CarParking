@@ -370,6 +370,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                         public void onMyLocationChange(Location arg0) {
 
                             LatLng carLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
+                            map.clear();
                             map.addMarker(new MarkerOptions().position(new LatLng(arg0.getLatitude(), arg0.getLongitude()))
                                     .title("Mi coche"));
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(carLocation, 16.0f));
@@ -395,9 +396,18 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void seleccionarNumero(String tipo, int numero) {
         if(tipo.equals("piso")){
-            piso.setText(Integer.toString(numero));
+            if(numero == -1992){
+                piso.setText("-");
+            }else{
+                piso.setText(Integer.toString(numero));
+            }
+
         }else{
-            plaza.setText(Integer.toString(numero));
+            if(numero == -1992) {
+                plaza.setText("-");
+            }else{
+                plaza.setText(Integer.toString(numero));
+            }
         }
     }
 
