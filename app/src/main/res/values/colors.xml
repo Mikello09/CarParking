@@ -6,6 +6,7 @@
     <color name="colorTexto">#FFFFFF</color>
     <color name="fondo">#fafafa</color>
     <color name="texto_color">#7D7D7D</color>
+    <color name="espera_fondo">#807D7D7D</color>
     <color name="texto_seleccionado">#04B431</color>
     <color name="eliminar_color">#DF0101</color>
 

@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.carpark.mls.carparking.AppConfig.Utils;
@@ -324,6 +325,32 @@ public class Dialog
                 dialog.dismiss();
             }
         });
+
+        dialog.show();
+
+    }
+    public static void esperaDialog(Context context){
+
+        final DialogInterface interfazEspera = (DialogInterface) context;
+
+        final android.app.Dialog dialog = new android.app.Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.espera_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
+
+        ProgressBar esperaProgress = (ProgressBar)dialog.findViewById(R.id.guardarProgreso);
+
+        esperaProgress.getIndeterminateDrawable().setColorFilter(context.getColor(R.color.blanco), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                interfazEspera.guardando();
+                dialog.dismiss();
+            }
+        }, 3000);
 
         dialog.show();
 

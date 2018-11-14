@@ -224,6 +224,8 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     }
     public void guardar(){
 
+        Dialog.esperaDialog(GuardarActivity.this);
+
         byte[] imageToDB = null;
         if(rotatedBitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -237,6 +239,9 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                                 imageToDB,
                                 Double.toString(lastLatitude),
                                 Double.toString(lastLongitude));
+
+
+
 
     }
     private void sacarFoto(){
@@ -500,5 +505,12 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
         mapaDetalles.setVisibility(View.GONE);
         mapaImagen.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void guardando() {
+
+        Navigator.NavigateToMain(GuardarActivity.this);
+
     }
 }
