@@ -2,6 +2,7 @@ package com.carpark.mls.carparking.AppConfig;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.widget.Toast;
 
 public class Utils {
 
@@ -14,6 +15,8 @@ public class Utils {
             String path = "fonts/" +fontName + ".otf";
             return Typeface.createFromAsset(context.getAssets(), path);
         }
-
+    }
+    public static void showToast(Context context, String mensaje){
+        Toast.makeText(context,mensaje,Toast.LENGTH_LONG).show();
     }
 }
