@@ -31,4 +31,14 @@ public class DBOperations {
         return listaRetornable;
     }
 
+    public static void eliminarCoches(Context context){
+
+        SQLHelper dbHelper = new SQLHelper(context);
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        dbHelper.eliminarCoches(database);
+        database.close();
+
+    }
+
 }

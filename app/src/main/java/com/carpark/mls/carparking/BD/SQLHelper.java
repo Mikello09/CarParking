@@ -17,7 +17,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String TABlE_NAME = "Coche";
 
-    private static final String DATABASE_CREATE = "create table if not exists Coche (id integer primary key autoincrement, piso TEXT NOT NULL, plaza TEXT, color TEXT, foto BLOB, latitud TEXT, longitud TEXT); ";
+    private static final String DATABASE_CREATE = "create table if not exists Coche (id integer primary key autoincrement, piso TEXT, plaza TEXT, color TEXT, foto BLOB, latitud TEXT, longitud TEXT); ";
 
     public SQLHelper(Context contexto) {
         super(contexto, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,7 +46,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     public List<Coche> getCoches(SQLiteDatabase db){
 
         List<Coche> listaRetornable = new ArrayList<Coche>();
-        Cursor c = db.rawQuery("SELECT * FROM Claves" , null);
+        Cursor c = db.rawQuery("SELECT * FROM " + TABlE_NAME , null);
         if (c.moveToFirst()){
             do {
                 Coche coche = new Coche();
@@ -61,5 +61,9 @@ public class SQLHelper extends SQLiteOpenHelper {
         }
         c.close();
         return listaRetornable;
+    }
+    public void eliminarCoches(SQLiteDatabase db){
+        String sentence = "DELETE FROM " + TABlE_NAME;
+        db.execSQL(sentence);
     }
 }

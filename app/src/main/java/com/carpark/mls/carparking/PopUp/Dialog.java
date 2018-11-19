@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.Interfaces.DialogInterface;
+import com.carpark.mls.carparking.Interfaces.EliminarInterface;
 import com.carpark.mls.carparking.R;
 import com.google.android.gms.vision.text.Line;
 
@@ -378,6 +379,36 @@ public class Dialog
 
         dialog.show();
     }
+    public static void eliminarCocheDialog(Context context){
+
+        final EliminarInterface interfazEliminar = (EliminarInterface) context;
+
+        final android.app.Dialog dialog = new android.app.Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.eliminar_coche_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
+
+        TextView siTexto = (TextView)dialog.findViewById(R.id.siText);
+        TextView noTexto = (TextView)dialog.findViewById(R.id.noText);
+
+        siTexto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                interfazEliminar.eliminarAparcamiento(true, dialog);
+            }
+        });
+        noTexto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                interfazEliminar.eliminarAparcamiento(false, dialog);
+            }
+        });
+
+        dialog.show();
+
+    }
+
     public static String seleccionar(Context context, LinearLayout[] bordes, TextView[] checks, String color){
 
         for(int i=0;i<colores.length;i++){
