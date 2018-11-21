@@ -7,4 +7,6 @@ public interface LocationInterface {
 
      void localizacion(Location location);
 
+     void activarGPS();
+
 }

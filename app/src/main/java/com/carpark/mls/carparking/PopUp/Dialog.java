@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.Interfaces.DialogInterface;
 import com.carpark.mls.carparking.Interfaces.EliminarInterface;
+import com.carpark.mls.carparking.Interfaces.LocationInterface;
 import com.carpark.mls.carparking.R;
 import com.google.android.gms.vision.text.Line;
 
@@ -453,6 +454,28 @@ public class Dialog
             public void onClick(View v) {
                 if(detalles.getText().toString() != "" || detalles != null)
                     interfazDetalles.ingresarMasDetalles(detalles.getText().toString());
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+    public static void dialogoGPSMain(Context context){
+        final LocationInterface interfazGps = (LocationInterface) context;
+
+        final android.app.Dialog dialog = new android.app.Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.gps_main_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
+
+        TextView entendido = (TextView)dialog.findViewById(R.id.okText);
+
+        entendido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                interfazGps.activarGPS();
                 dialog.dismiss();
             }
         });

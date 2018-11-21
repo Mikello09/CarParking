@@ -1,10 +1,19 @@
 package com.carpark.mls.carparking.UI;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         getSupportActionBar().hide();//Eliminar barra superior
 
         onBind();
-        estadoApp();
+
     }
 
     public void onBind(){
@@ -86,10 +95,10 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     public void estadoApp(){
 
         if(DBOperations.getCoches(MainActivity.this).size() == 0){
+            permisoLocalizacion();
 
         }else{
-            CustomLocation customLocation = new CustomLocation(MainActivity.this);
-            customLocation.getActualLocation();
+            permisoLocalizacion();
         }
 
     }
@@ -98,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     public void onBackPressed() {
         return;
     }
+
     public void pruebaVolley(String latitud, String longitud){
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
         String url ="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitud + "," + longitud + "&radius=5000&types=parking&sensor=false&key=" + placesAPI;
@@ -133,6 +143,65 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
     @Override
     public void localizacion(Location location) {
-        pruebaVolley(Double.toString(location.getLatitude()),Double.toString(location.getLongitude()));
+        Utils.showToast(MainActivity.this,"LOCATION UPDATE");
+        //pruebaVolley(Double.toString(location.getLatitude()),Double.toString(location.getLongitude()));
+    }
+
+    @Override
+    public void activarGPS() {
+        isGpsEnabled();
+    }
+
+    private void permisoLocalizacion(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                isGpsEnabled();
+
+            } else {
+
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+            }
+        }
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == 200){
+            isGpsEnabled();
+        }
+        if(requestCode == 300){
+            getLocationMode();
+        }
+    }
+    public void isGpsEnabled(){
+        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            getLocationMode();
+        }else{
+            Dialog.dialogoGPSMain(MainActivity.this);
+        }
+    }
+    public void getLocationMode()
+    {
+        try {
+            if (Settings.Secure.getInt(MainActivity.this.getContentResolver(), Settings.Secure.LOCATION_MODE) != 3) {
+                startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),300);
+            }else{
+                CustomLocation customLocation = new CustomLocation(MainActivity.this);
+                customLocation.getActualLocation();
+            }
+        }catch (Exception e){
+
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        estadoApp();
     }
 }
