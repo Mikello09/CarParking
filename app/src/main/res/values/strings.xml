@@ -6,5 +6,6 @@
     <string name="check_icono">&#xf00c;</string>
     <string name="aparcarMiCoche">&#xf540;</string>
     <string name="buscarMiCoche">&#xf689;</string>
+    <string name="parkingIcono">&#xf540;</string>
 
 </resources>

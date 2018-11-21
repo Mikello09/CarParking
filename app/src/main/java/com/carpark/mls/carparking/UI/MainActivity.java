@@ -13,9 +13,12 @@ import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -26,12 +29,20 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.carpark.mls.carparking.AppConfig.CustomLocation;
 import com.carpark.mls.carparking.AppConfig.Navigator;
+import com.carpark.mls.carparking.AppConfig.Parking;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.BD.DBOperations;
 import com.carpark.mls.carparking.Interfaces.EliminarInterface;
 import com.carpark.mls.carparking.Interfaces.LocationInterface;
 import com.carpark.mls.carparking.PopUp.Dialog;
 import com.carpark.mls.carparking.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements EliminarInterface,LocationInterface {
@@ -44,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     private LinearLayout guardarLayout;
     private LinearLayout buscarLayout;
 
+    private RecyclerView lista;
 
     private final String placesAPI = "AIzaSyDYExxjo__oIjI9cqwFkQt-2oq-kBfSdp8";
 
@@ -65,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         codebounds = (TextView)findViewById(R.id.codebounds_text);
         guardarLayout = (LinearLayout)findViewById(R.id.guardarCocheLayout);
         buscarLayout = (LinearLayout)findViewById(R.id.dondeEstaLayout);
+        lista = (RecyclerView) findViewById(R.id.lista);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
@@ -116,8 +129,22 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Utils.showToast(MainActivity.this,"OK: " + response);
+                        try{
+                            List<Parking> listaParking = new ArrayList<>();
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray routesArray = jsonObject.getJSONArray("results");
+                            for(int i=0;i<routesArray.length();i++){
+                                JSONObject route = routesArray.getJSONObject(i);
+                                Parking p = new Parking(route.getString("name"),"500");
+                                listaParking.add(p);
+                            }
+                            ParkingListaAdapter adapter = new ParkingListaAdapter(MainActivity.this, listaParking);
+                            lista.setAdapter(adapter);
+                            lista.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                        }catch (JSONException e){
+                            Log.d("","");
+                        }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -143,8 +170,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
     @Override
     public void localizacion(Location location) {
-        Utils.showToast(MainActivity.this,"LOCATION UPDATE");
-        //pruebaVolley(Double.toString(location.getLatitude()),Double.toString(location.getLongitude()));
+        pruebaVolley(Double.toString(location.getLatitude()),Double.toString(location.getLongitude()));
     }
 
     @Override

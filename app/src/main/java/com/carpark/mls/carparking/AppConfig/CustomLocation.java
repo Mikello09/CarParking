@@ -17,6 +17,7 @@ public class CustomLocation {
     private Context context;
     private LocationManager locationManager;
     private Criteria criteria;
+    private LocationListener locationListener;
 
 
     public CustomLocation(Context context){
@@ -41,10 +42,11 @@ public class CustomLocation {
         final LocationInterface interfazEspera = (LocationInterface) context;
 
 
-        final LocationListener locationListener = new LocationListener() {
+        locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
 
                 interfazEspera.localizacion(location);
+                locationManager.removeUpdates(locationListener);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
