@@ -10,6 +10,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -138,29 +139,8 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try{
-                            List<Parking> listaParking = new ArrayList<>();
-                            JSONObject jsonObject = new JSONObject(response);
-                            JSONArray routesArray = jsonObject.getJSONArray("results");
-                            for(int i=0;i<routesArray.length();i++){
-                                JSONObject route = routesArray.getJSONObject(i);
-                                JSONObject geometry = route.getJSONObject("geometry");
-                                JSONObject location = geometry.getJSONObject("location");
-                                Parking p = new Parking(route.getString("name"),
-                                                        calcularDistancia(location.getDouble("lat"),location.getDouble("lng"),latitud,longitud),
-                                                        location.getDouble("lat"),
-                                                        location.getDouble("lng"),
-                                                        route.getString("vicinity"),
-                                                        route.getDouble("rating"));
-                                listaParking.add(p);
-                            }
-                            ParkingListaAdapter adapter = new ParkingListaAdapter(MainActivity.this, listaParking);
-                            lista.setAdapter(adapter);
-                            lista.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                            listaLayout();
-                        }catch (JSONException e){
-                            Log.d("","");
-                        }
+
+                        obtenerLista(response,latitud,longitud);
 
 
                     }
@@ -190,6 +170,36 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         float distance = loc1.distanceTo(loc2)/1000;
 
         return new DecimalFormat("##.###").format(distance);
+    }
+
+    public void obtenerLista(String response, String latitud, String longitud){
+        try{
+            List<Parking> listaParking = new ArrayList<>();
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray routesArray = jsonObject.getJSONArray("results");
+            for(int i=0;i<routesArray.length();i++){
+                JSONObject route = routesArray.getJSONObject(i);
+                JSONObject geometry = route.getJSONObject("geometry");
+                JSONObject location = geometry.getJSONObject("location");
+
+                String vicinity = route.has("vicinity") ? route.getString("vicinity") : "";
+                Double rating = route.has("rating") ? route.getDouble("rating") : 0;
+
+                Parking p = new Parking(route.getString("name"),
+                        calcularDistancia(location.getDouble("lat"),location.getDouble("lng"),latitud,longitud),
+                        location.getDouble("lat"),
+                        location.getDouble("lng"),
+                        vicinity,
+                        rating);
+                listaParking.add(p);
+            }
+            ParkingListaAdapter adapter = new ParkingListaAdapter(MainActivity.this, listaParking);
+            lista.setAdapter(adapter);
+            lista.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            listaLayout();
+        }catch (JSONException e){
+            Log.d("","");
+        }
     }
 
     @Override
