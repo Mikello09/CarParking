@@ -42,6 +42,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         return;
     }
 
-    public void pruebaVolley(String latitud, String longitud){
+    public void pruebaVolley(final String latitud, final String longitud){
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
         String url ="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitud + "," + longitud + "&radius=5000&types=parking&sensor=false&key=" + placesAPI;
 
@@ -140,7 +141,8 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
                                 JSONObject route = routesArray.getJSONObject(i);
                                 JSONObject geometry = route.getJSONObject("geometry");
                                 JSONObject location = geometry.getJSONObject("location");
-                                Parking p = new Parking(route.getString("name"), "500",
+                                Parking p = new Parking(route.getString("name"),
+                                                        calcularDistancia(location.getDouble("lat"),location.getDouble("lng"),latitud,longitud),
                                                         location.getDouble("lat"),
                                                         location.getDouble("lng"),
                                                         route.getString("vicinity"),
@@ -166,6 +168,23 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    public String calcularDistancia(double lat2, double lng2, String latS1, String lngS1){
+        double lat1 = Double.parseDouble(latS1);
+        double lng1 = Double.parseDouble(lngS1);
+
+        Location loc1 = new Location("");
+        loc1.setLatitude(lat1);
+        loc1.setLongitude(lng1);
+
+        Location loc2 = new Location("");
+        loc2.setLatitude(lat2);
+        loc2.setLongitude(lng2);
+
+        float distance = loc1.distanceTo(loc2)/1000;
+
+        return new DecimalFormat("##.###").format(distance);
     }
 
     @Override

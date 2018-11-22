@@ -43,7 +43,7 @@ public class ParkingListaAdapter extends RecyclerView.Adapter<ParkingListaAdapte
 
         viewHolder.parkingIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
         viewHolder.parkingTitulo.setText(lista.get(i).getTitulo());
-        viewHolder.parkingDistancia.setText(lista.get(i).getDistancia());
+        viewHolder.parkingDistancia.setText(lista.get(i).getDistancia() + " km");
         viewHolder.parkingVicinity.setText(lista.get(i).getVicinity());
         viewHolder.parkingstars.setRating((float)lista.get(i).getRating());
 

@@ -10,11 +10,12 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.15"
-        android:gravity="center">
+        android:gravity="center|top">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/texto_color"
+            android:textColor="@color/azul"
+            android:layout_marginTop="5dp"
             android:id="@+id/parkingIcono"
             android:text="@string/parkingIcono"
             android:textSize="25dp"/>
@@ -76,7 +77,8 @@
                     android:scaleY="0.5"
                     android:id="@+id/parkingStars"
                     android:numStars="5"
-                    android:stepSize="0.1"/>
+                    android:stepSize="0.1"
+                    android:theme="@style/RatingBar"/>
             </LinearLayout>
 
         </LinearLayout>
