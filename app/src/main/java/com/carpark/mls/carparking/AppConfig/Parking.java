@@ -4,11 +4,19 @@ public class Parking {
 
     private String titulo;
     private String distancia;
+    private Double latitude;
+    private Double longitude;
+    private String vicinity;
+    private Double rating;
 
 
-    public Parking(String titulo, String distancia){
+    public Parking(String titulo, String distancia, Double latitude, Double longitude, String vicinity, Double rating){
         this.titulo = titulo;
         this.distancia = distancia;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.vicinity = vicinity;
+        this.rating = rating;
     }
 
 
@@ -27,6 +35,38 @@ public class Parking {
 
     public void setDistancia(String distancia) {
         this.distancia = distancia;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getVicinity() {
+        return vicinity;
+    }
+
+    public void setVicinity(String vicinity) {
+        this.vicinity = vicinity;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
 }

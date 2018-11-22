@@ -43,7 +43,8 @@ public class ParkingListaAdapter extends RecyclerView.Adapter<ParkingListaAdapte
 
         viewHolder.parkingIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
         viewHolder.parkingTitulo.setText(lista.get(i).getTitulo());
-        viewHolder.parkingDistancia.setText(lista.get(i).getDistancia());
+        viewHolder.parkingDistancia.setText("Distancia: " + lista.get(i).getDistancia());
+        viewHolder.parkingVicinity.setText(lista.get(i).getVicinity());
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,12 +65,14 @@ public class ParkingListaAdapter extends RecyclerView.Adapter<ParkingListaAdapte
         private TextView parkingIcono;
         private TextView parkingTitulo;
         private TextView parkingDistancia;
+        private TextView parkingVicinity;
 
         public ViewHolder(View itemView){
             super(itemView);
             parkingIcono = itemView.findViewById(R.id.parkingIcono);
             parkingTitulo = itemView.findViewById(R.id.parkingTitulo);
             parkingDistancia = itemView.findViewById(R.id.parkingDistancia);
+            parkingVicinity = itemView.findViewById(R.id.parkingVicinity);
 
         }
     }

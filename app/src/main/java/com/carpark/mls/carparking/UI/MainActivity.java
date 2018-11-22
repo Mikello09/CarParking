@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     private LinearLayout buscarLayout;
 
     private RecyclerView lista;
+    private ProgressBar espera;
 
     private final String placesAPI = "AIzaSyDYExxjo__oIjI9cqwFkQt-2oq-kBfSdp8";
 
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         guardarLayout = (LinearLayout)findViewById(R.id.guardarCocheLayout);
         buscarLayout = (LinearLayout)findViewById(R.id.dondeEstaLayout);
         lista = (RecyclerView) findViewById(R.id.lista);
+        espera = (ProgressBar)findViewById(R.id.esperaLista);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
@@ -135,15 +138,23 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
                             JSONArray routesArray = jsonObject.getJSONArray("results");
                             for(int i=0;i<routesArray.length();i++){
                                 JSONObject route = routesArray.getJSONObject(i);
-                                Parking p = new Parking(route.getString("name"),"500");
+                                JSONObject geometry = route.getJSONObject("geometry");
+                                JSONObject location = geometry.getJSONObject("location");
+                                Parking p = new Parking(route.getString("name"), "500",
+                                                        location.getDouble("lat"),
+                                                        location.getDouble("lng"),
+                                                        route.getString("vicinity"),
+                                                        route.getDouble("rating"));
                                 listaParking.add(p);
                             }
                             ParkingListaAdapter adapter = new ParkingListaAdapter(MainActivity.this, listaParking);
                             lista.setAdapter(adapter);
                             lista.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                            listaLayout();
                         }catch (JSONException e){
                             Log.d("","");
                         }
+
 
                     }
                 }, new Response.ErrorListener() {
@@ -170,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
     @Override
     public void localizacion(Location location) {
+        esperaLayout();
         pruebaVolley(Double.toString(location.getLatitude()),Double.toString(location.getLongitude()));
     }
 
@@ -229,5 +241,16 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     protected void onResume() {
         super.onResume();
         estadoApp();
+    }
+
+    //////INFO VISIBILITY
+    public void esperaLayout(){
+        espera.setVisibility(View.VISIBLE);
+        lista.setVisibility(View.GONE);
+    }
+
+    public void listaLayout(){
+        espera.setVisibility(View.GONE);
+        lista.setVisibility(View.VISIBLE);
     }
 }
