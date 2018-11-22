@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.carpark.mls.carparking.AppConfig.Parking;
@@ -40,11 +41,11 @@ public class ParkingListaAdapter extends RecyclerView.Adapter<ParkingListaAdapte
 
         final int posicion = i;
 
-
         viewHolder.parkingIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
         viewHolder.parkingTitulo.setText(lista.get(i).getTitulo());
-        viewHolder.parkingDistancia.setText("Distancia: " + lista.get(i).getDistancia());
+        viewHolder.parkingDistancia.setText(lista.get(i).getDistancia());
         viewHolder.parkingVicinity.setText(lista.get(i).getVicinity());
+        viewHolder.parkingstars.setRating((float)lista.get(i).getRating());
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +67,7 @@ public class ParkingListaAdapter extends RecyclerView.Adapter<ParkingListaAdapte
         private TextView parkingTitulo;
         private TextView parkingDistancia;
         private TextView parkingVicinity;
+        private RatingBar parkingstars;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -73,6 +75,7 @@ public class ParkingListaAdapter extends RecyclerView.Adapter<ParkingListaAdapte
             parkingTitulo = itemView.findViewById(R.id.parkingTitulo);
             parkingDistancia = itemView.findViewById(R.id.parkingDistancia);
             parkingVicinity = itemView.findViewById(R.id.parkingVicinity);
+            parkingstars = itemView.findViewById(R.id.parkingStars);
 
         }
     }

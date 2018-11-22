@@ -7,10 +7,10 @@ public class Parking {
     private Double latitude;
     private Double longitude;
     private String vicinity;
-    private Double rating;
+    private double rating;
 
 
-    public Parking(String titulo, String distancia, Double latitude, Double longitude, String vicinity, Double rating){
+    public Parking(String titulo, String distancia, Double latitude, Double longitude, String vicinity, double rating){
         this.titulo = titulo;
         this.distancia = distancia;
         this.latitude = latitude;
@@ -61,11 +61,11 @@ public class Parking {
         this.vicinity = vicinity;
     }
 
-    public Double getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
