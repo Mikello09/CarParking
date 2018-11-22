@@ -482,4 +482,27 @@ public class Dialog
 
         dialog.show();
     }
+
+    public static void dialogoInternet(Context context){
+        final LocationInterface interfazInternet = (LocationInterface) context;
+
+        final android.app.Dialog dialog = new android.app.Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.internet_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
+
+        TextView entendido = (TextView)dialog.findViewById(R.id.okText);
+
+        entendido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                interfazInternet.activarInternet();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
 }

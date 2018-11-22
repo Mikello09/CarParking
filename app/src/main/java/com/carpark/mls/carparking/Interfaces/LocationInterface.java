@@ -9,4 +9,6 @@ public interface LocationInterface {
 
      void activarGPS();
 
+     void activarInternet();
+
 }

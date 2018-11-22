@@ -111,12 +111,17 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
     public void estadoApp(){
 
-        if(DBOperations.getCoches(MainActivity.this).size() == 0){
-            permisoLocalizacion();
+        if(Utils.hasInternetAccess()){
+            if(DBOperations.getCoches(MainActivity.this).size() == 0){
+                permisoLocalizacion();
 
+            }else{
+                permisoLocalizacion();
+            }
         }else{
-            permisoLocalizacion();
+
         }
+
 
     }
 
@@ -207,6 +212,11 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     @Override
     public void activarGPS() {
         isGpsEnabled();
+    }
+
+    @Override
+    public void activarInternet() {
+        estadoApp();
     }
 
     private void permisoLocalizacion(){
