@@ -2,6 +2,8 @@ package com.carpark.mls.carparking.AppConfig;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.widget.Toast;
 
 import java.net.HttpURLConnection;
@@ -24,30 +26,14 @@ public class Utils {
         Toast.makeText(context,mensaje,Toast.LENGTH_LONG).show();
     }
 
-    public static boolean hasInternetAccess()
+    public static boolean hasInternetAccess(Context context)
     {
-        try
-        {
-            URL url = new URL("http://www.google.com");
-
-            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-            urlc.setRequestProperty("User-Agent", "Android Application:1");
-            urlc.setRequestProperty("Connection", "close");
-            urlc.setConnectTimeout(1000 * 30);
-            urlc.connect();
-
-            // http://www.w3.org/Protocols/HTTP/HTRESP.html
-            if (urlc.getResponseCode() == 200 || urlc.getResponseCode() > 400)
-            {
-                // Requested site is available
-                return true;
-            }
-        }
-        catch (Exception ex)
-        {
-            // Error while trying to connect
+        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            return true;
+        }else {
             return false;
         }
-        return false;
     }
 }

@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -29,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.carpark.mls.carparking.AppConfig.Coche;
 import com.carpark.mls.carparking.AppConfig.CustomLocation;
 import com.carpark.mls.carparking.AppConfig.Navigator;
 import com.carpark.mls.carparking.AppConfig.Parking;
@@ -58,8 +60,22 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     private LinearLayout guardarLayout;
     private LinearLayout buscarLayout;
 
+    ////LISTA LAYOUT
     private RecyclerView lista;
     private ProgressBar espera;
+    private LinearLayout listaLayout;
+
+
+    ///ERROR LAYOUT
+    private LinearLayout errorLayout;
+    private TextView alertIcono;
+    private TextView errorText;
+    private TextView reintentar;
+
+    //DETAIL LAYOUT
+    private TextView encontradoText;
+
+    private LinearLayout detailLayout;
 
     private final String placesAPI = "AIzaSyDYExxjo__oIjI9cqwFkQt-2oq-kBfSdp8";
 
@@ -83,10 +99,18 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         buscarLayout = (LinearLayout)findViewById(R.id.dondeEstaLayout);
         lista = (RecyclerView) findViewById(R.id.lista);
         espera = (ProgressBar)findViewById(R.id.esperaLista);
+        listaLayout = (LinearLayout)findViewById(R.id.listaDetail);
+        errorLayout = (LinearLayout) findViewById(R.id.errorDetail);
+        detailLayout = (LinearLayout)findViewById(R.id.infoDetail);
+        alertIcono = (TextView)findViewById(R.id.warningIcono);
+        errorText = (TextView)findViewById(R.id.errorTexto);
+        reintentar = (TextView)findViewById(R.id.reintentarTexto);
+        encontradoText = (TextView)findViewById(R.id.encontradoText);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         buscarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
+        alertIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         titulo.setTypeface(Utils.setFont(MainActivity.this,"playfair",false));
         codebounds.setTypeface(Utils.setFont(MainActivity.this,"sofia",false));
 
@@ -102,9 +126,23 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
                 if(DBOperations.getCoches(MainActivity.this).size() == 0) {
                     Navigator.NavigateToGuardar(MainActivity.this);
                 }else {
-                    Dialog.eliminarCocheDialog(MainActivity.this);
+                    Dialog.eliminarCocheDialog(MainActivity.this,true);
                 }
 
+            }
+        });
+
+        reintentar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                estadoApp();
+            }
+        });
+
+        encontradoText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog.eliminarCocheDialog(MainActivity.this,false);
             }
         });
 
@@ -112,18 +150,17 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
     public void estadoApp(){
 
-        if(Utils.hasInternetAccess()){
-            if(DBOperations.getCoches(MainActivity.this).size() == 0){
+        esperaLayout();
+        List<Coche> coches = DBOperations.getCoches(MainActivity.this);
+        if(coches.size() == 0) {
+            if (Utils.hasInternetAccess(MainActivity.this)) {
                 permisoLocalizacion();
-
-            }else{
-                permisoLocalizacion();
+            } else {
+                errorLayout("No estas conectado a internet");
             }
         }else{
-
+            detailLayout(coches);
         }
-
-
     }
 
     @Override
@@ -142,12 +179,11 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
                         obtenerLista(response,latitud,longitud);
 
-
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Utils.showToast(MainActivity.this,"ERROR: " + error.getMessage());
+                errorLayout("Error en volley: " + error.getMessage());
             }
         });
 
@@ -198,16 +234,21 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
             lista.setLayoutManager(new LinearLayoutManager(MainActivity.this));
             listaLayout();
         }catch (JSONException e){
-            Log.d("","");
+            errorLayout("Error en JSON parse: " + e.getMessage());
         }
     }
 
     @Override
-    public void eliminarAparcamiento(Boolean eliminar, android.app.Dialog dialogo) {
+    public void eliminarAparcamiento(Boolean eliminar, android.app.Dialog dialogo, Boolean guardar) {
 
         if (eliminar){
             DBOperations.eliminarCoches(MainActivity.this);
-            Navigator.NavigateToGuardar(MainActivity.this);
+            if(guardar) {
+                Navigator.NavigateToGuardar(MainActivity.this);
+            }else{
+                dialogo.dismiss();
+                estadoApp();
+            }
         }else{
             dialogo.dismiss();
         }
@@ -215,7 +256,6 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
     @Override
     public void localizacion(Location location) {
-        esperaLayout();
         pruebaVolley(Double.toString(location.getLatitude()),Double.toString(location.getLongitude()));
     }
 
@@ -227,6 +267,11 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     @Override
     public void activarInternet() {
         estadoApp();
+    }
+
+    @Override
+    public void cancelarGPS() {
+        errorLayout("No tiene el GPS conectado");
     }
 
     private void permisoLocalizacion(){
@@ -272,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
                 customLocation.getActualLocation();
             }
         }catch (Exception e){
-
+            errorLayout("Error en cambiar el modo de GPS");
         }
     }
 
@@ -285,11 +330,33 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     //////INFO VISIBILITY
     public void esperaLayout(){
         espera.setVisibility(View.VISIBLE);
-        lista.setVisibility(View.GONE);
+        listaLayout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
+        detailLayout.setVisibility(View.GONE);
     }
 
     public void listaLayout(){
         espera.setVisibility(View.GONE);
-        lista.setVisibility(View.VISIBLE);
+        listaLayout.setVisibility(View.VISIBLE);
+        errorLayout.setVisibility(View.GONE);
+        detailLayout.setVisibility(View.GONE);
     }
+
+    public void detailLayout(List<Coche> coches){
+        espera.setVisibility(View.GONE);
+        listaLayout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
+        detailLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void errorLayout(String errorMessage){
+        espera.setVisibility(View.GONE);
+        listaLayout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.VISIBLE);
+        detailLayout.setVisibility(View.GONE);
+
+        errorText.setText(errorMessage);
+    }
+
+
 }

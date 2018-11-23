@@ -380,7 +380,7 @@ public class Dialog
 
         dialog.show();
     }
-    public static void eliminarCocheDialog(Context context){
+    public static void eliminarCocheDialog(Context context, final Boolean guardar){
 
         final EliminarInterface interfazEliminar = (EliminarInterface) context;
 
@@ -396,13 +396,13 @@ public class Dialog
         siTexto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                interfazEliminar.eliminarAparcamiento(true, dialog);
+                interfazEliminar.eliminarAparcamiento(true, dialog,guardar);
             }
         });
         noTexto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                interfazEliminar.eliminarAparcamiento(false, dialog);
+                interfazEliminar.eliminarAparcamiento(false, dialog,guardar);
             }
         });
 
@@ -470,12 +470,20 @@ public class Dialog
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
 
         TextView entendido = (TextView)dialog.findViewById(R.id.okText);
+        TextView cancelar = (TextView)dialog.findViewById(R.id.cancelarText);
 
         entendido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 interfazGps.activarGPS();
+                dialog.dismiss();
+            }
+        });
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                interfazGps.cancelarGPS();
                 dialog.dismiss();
             }
         });

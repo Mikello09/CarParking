@@ -11,4 +11,6 @@ public interface LocationInterface {
 
      void activarInternet();
 
+     void cancelarGPS();
+
 }
