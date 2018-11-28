@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -40,6 +43,7 @@ import com.carpark.mls.carparking.Interfaces.EliminarInterface;
 import com.carpark.mls.carparking.Interfaces.LocationInterface;
 import com.carpark.mls.carparking.PopUp.Dialog;
 import com.carpark.mls.carparking.R;
+import com.google.android.gms.vision.text.Line;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,8 +78,14 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
     //DETAIL LAYOUT
     private TextView encontradoText;
-
     private LinearLayout detailLayout;
+    private TextView pisoDetail;
+    private TextView plazaDetail;
+    private LinearLayout colorDetail;
+    private TextView masDetallesDetail;
+    private ImageView imagenDetail;
+
+
 
     private final String placesAPI = "AIzaSyDYExxjo__oIjI9cqwFkQt-2oq-kBfSdp8";
 
@@ -106,6 +116,11 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         errorText = (TextView)findViewById(R.id.errorTexto);
         reintentar = (TextView)findViewById(R.id.reintentarTexto);
         encontradoText = (TextView)findViewById(R.id.encontradoText);
+        pisoDetail = (TextView)findViewById(R.id.pisoDetail);
+        plazaDetail = (TextView)findViewById(R.id.plazaDetail);
+        colorDetail = (LinearLayout)findViewById(R.id.colorDetail);
+        masDetallesDetail = (TextView)findViewById(R.id.masDetallesDetail);
+        imagenDetail = (ImageView)findViewById(R.id.imagenDetail);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
@@ -347,6 +362,27 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         listaLayout.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         detailLayout.setVisibility(View.VISIBLE);
+
+        Coche coche = coches.get(0);
+
+        pisoDetail.setText(coche.getPiso());
+        plazaDetail.setText(coche.getPlaza());
+        colorDetail.setBackground(getBacgroundColor(coche.getColor()));
+        masDetallesDetail.setText(coche.getDetalles().equals("") ? "No hay detalles" : coche.getDetalles());
+        if(coche.getFoto().equals(null)){
+            imagenDetail.setBackgroundResource(R.mipmap.coche_icon);
+        }else{
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inDither = false;
+            options.inPurgeable = true;
+            options.inInputShareable = true;
+            options.inTempStorage = new byte[1024 *32];
+
+            imagenDetail.setImageBitmap(BitmapFactory.decodeByteArray(coche.getFoto(), 0, coche.getFoto().length,options));
+        }
+
+
     }
 
     public void errorLayout(String errorMessage){
@@ -356,6 +392,31 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         detailLayout.setVisibility(View.GONE);
 
         errorText.setText(errorMessage);
+    }
+
+    public Drawable getBacgroundColor(String color){
+        switch (color){
+            case "negro":
+                return getResources().getDrawable(R.drawable.negro_view_seleccionado);
+            case "azul":
+                return getResources().getDrawable(R.drawable.azul_view_seleccionado);
+            case "rojo":
+                return getResources().getDrawable(R.drawable.rojo_view_seleccionado);
+            case "verde":
+                return getResources().getDrawable(R.drawable.verde_view_seleccionado);
+            case "amarillo":
+                return getResources().getDrawable(R.drawable.amarillo_view_seleccionado);
+            case "morado":
+                return getResources().getDrawable(R.drawable.morado_view_seleccionado);
+            case "marron":
+                return getResources().getDrawable(R.drawable.marron_view_seleccionado);
+            case "blanco":
+                return getResources().getDrawable(R.drawable.blanco_view_seleccionado);
+            case "gris":
+                return getResources().getDrawable(R.drawable.gris_view_seleccionado);
+            default:
+                return getResources().getDrawable(R.drawable.blanco_view_seleccionado);
+        }
     }
 
 

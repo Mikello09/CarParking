@@ -229,13 +229,16 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         byte[] imageToDB = null;
         if(rotatedBitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 90, baos);
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
             imageToDB = baos.toByteArray();
+            rotatedBitmap.
         }
 
-        DBOperations.addCoche(GuardarActivity.this,piso.getText().toString(),
+        DBOperations.addCoche(GuardarActivity.this,
+                                piso.getText().toString(),
                                 plaza.getText().toString(),
                                 selectedColor,
+                                masDetallesTexto.getText().equals("Mas detalles >") ? "" : masDetallesTexto.getText().toString(),
                                 imageToDB,
                                 Double.toString(lastLatitude),
                                 Double.toString(lastLongitude));
@@ -457,31 +460,31 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         selectedColor = color;
         switch (color){
             case "negro":
-                colorSeleccionado.setBackgroundColor(getResources().getColor(R.color.negro));
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.negro_view_seleccionado));
                 break;
             case "azul":
-                colorSeleccionado.setBackgroundColor(getResources().getColor(R.color.azul));
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.azul_view_seleccionado));
                 break;
             case "rojo":
-                colorSeleccionado.setBackgroundColor(getResources().getColor(R.color.rojo));
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.rojo_view_seleccionado));
                 break;
             case "verde":
-                colorSeleccionado.setBackgroundColor(getResources().getColor(R.color.verde));
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.verde_view_seleccionado));
                 break;
             case "amarillo":
-                colorSeleccionado.setBackgroundColor(getResources().getColor(R.color.amarillo));
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.amarillo_view_seleccionado));
                 break;
             case "morado":
-                colorSeleccionado.setBackgroundColor(getResources().getColor(R.color.morado));
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.morado_view_seleccionado));
                 break;
             case "marron":
-                colorSeleccionado.setBackgroundColor(getResources().getColor(R.color.marron));
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.marron_view_seleccionado));
                 break;
             case "blanco":
-                colorSeleccionado.setBackgroundColor(getResources().getColor(R.color.blanco));
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.blanco_view_seleccionado));
                 break;
             case "gris":
-                colorSeleccionado.setBackgroundColor(getResources().getColor(R.color.gris));
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.gris_view_seleccionado));
                 break;
         }
     }
