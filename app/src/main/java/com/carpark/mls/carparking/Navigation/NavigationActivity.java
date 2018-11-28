@@ -1,11 +1,17 @@
 package com.carpark.mls.carparking.Navigation;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.annotation.DrawableRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.carpark.mls.carparking.AppConfig.Navigator;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.PopUp.Dialog;
 import com.carpark.mls.carparking.R;
@@ -22,7 +29,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -53,9 +63,17 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Buscar mi coche");
 
         getExtras();
         configureMap();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Navigator.NavigateToMain(NavigationActivity.this);
+        return true;
     }
 
     public void getExtras(){
@@ -72,7 +90,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
     public void directionsVolley(){
         RequestQueue queue = Volley.newRequestQueue(NavigationActivity.this);
-        String url ="https://maps.googleapis.com/maps/api/directions/json?origin=" + lastLatitude + "," + lastLongitude + "&destination=" + destinationLatitude + "," + destinationLongitude + "&sensor=false&key=" + directionsApiKey;
+        String url ="https://maps.googleapis.com/maps/api/directions/json?origin=" + lastLatitude + "," + lastLongitude + "&destination=" + destinationLatitude + "," + destinationLongitude + "&mode=walking&sensor=false&key=" + directionsApiKey;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -97,7 +115,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                                 }
                                 lineOptions.addAll(points);
                                 lineOptions.width(10);
-                                lineOptions.color(Color.RED);
+                                lineOptions.color(NavigationActivity.this.getColor(R.color.azul));
                             }
                             map.addPolyline(lineOptions);
                         }catch (JSONException e){
@@ -157,10 +175,17 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                                 lastLongitude = arg0.getLongitude();
 
                                 LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
-                                map.addMarker(new MarkerOptions().position(yoLocation).title("Yo"));
+                                MarkerOptions markerYo = new MarkerOptions();
+                                markerYo.position(yoLocation).title("Yo");
+                                markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
+                                map.addMarker(markerYo);
 
-                                LatLng parkingLocation = new LatLng(destinationLatitude, destinationLongitude);
-                                map.addMarker(new MarkerOptions().position(parkingLocation).title("Parking"));
+
+                                LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
+                                MarkerOptions markerCar = new MarkerOptions();
+                                markerCar.position(carLocation).title("Coche");
+                                markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
+                                map.addMarker(markerCar);
 
                                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
 
