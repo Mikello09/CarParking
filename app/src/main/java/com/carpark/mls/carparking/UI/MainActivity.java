@@ -38,6 +38,7 @@ import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.BD.DBOperations;
 import com.carpark.mls.carparking.Interfaces.EliminarInterface;
 import com.carpark.mls.carparking.Interfaces.LocationInterface;
+import com.carpark.mls.carparking.Navigation.NavigationActivity;
 import com.carpark.mls.carparking.PopUp.Dialog;
 import com.carpark.mls.carparking.R;
 
@@ -129,6 +130,14 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
                     Dialog.eliminarCocheDialog(MainActivity.this,true);
                 }
 
+            }
+        });
+
+        buscarLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iNavigation = new Intent(MainActivity.this,NavigationActivity.class);
+                startActivity(iNavigation);
             }
         });
 
