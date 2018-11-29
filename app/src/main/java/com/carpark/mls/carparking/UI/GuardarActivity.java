@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +63,9 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     private final float LOCATION_REFRESH_DISTANCE = 10;
     private GoogleMap map;
     private LinearLayout mapaImagen;
-    private LinearLayout mapaDetalles;
+    private RelativeLayout mapaDetalles;
+    private TextView cerrarMapaIcono;
+    private LinearLayout cerrarMapaLayout;
 
     //DETALLES VARS
     private LinearLayout anadirDetallasImagen;
@@ -75,14 +78,19 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     private TextView piso;
     private String selectedColor = "negro";
     private TextView masDetallesTexto;
+    private TextView cerrarDetallesIcono;
+    private LinearLayout cerrarDetallesLayout;
 
     //FOTO VARS
     private LinearLayout anadirFotoLayout;
     private static int RESULT_IMAGE_CLICK = 1;
     private LinearLayout fotoLayoutDetalles;
+    private LinearLayout fotoLayoutImagen;
     private ImageView foto;
     private Uri imageUri;
     private Bitmap rotatedBitmap = null;
+    private TextView cerrarFotoIcono;
+    private LinearLayout cerrarFotoLayout;
 
     //ANIMATIONS
     private Animation fadein;
@@ -115,14 +123,26 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         plaza = (TextView)findViewById(R.id.plazaTexto);
         piso = (TextView)findViewById(R.id.pisoTexto);
         anadirDetallasImagen = (LinearLayout)findViewById(R.id.anadirDetallesImagen);
-        anadirDetallesTexto = (LinearLayout)findViewById(R.id.anadirDetallesTexto);
+        anadirDetallesTexto = (LinearLayout) findViewById(R.id.anadirDetallesTexto);
         masDetallesTexto = (TextView)findViewById(R.id.masDetallesTexto);
         anadirFotoLayout = (LinearLayout)findViewById(R.id.fotoLayoutImagen);
-        fotoLayoutDetalles = (LinearLayout)findViewById(R.id.fotoLayoutDetalles);
+        fotoLayoutDetalles = (LinearLayout) findViewById(R.id.fotoLayoutDetalles);
         foto = (ImageView)findViewById(R.id.foto);
         mapaImagen = (LinearLayout)findViewById(R.id.mapaLayoutImagen);
-        mapaDetalles = (LinearLayout)findViewById(R.id.mapaLayoutDetalles);
+        mapaDetalles = (RelativeLayout)findViewById(R.id.mapaLayoutDetalles);
         guardarLayout = (LinearLayout)findViewById(R.id.guardarLayout);
+        cerrarDetallesIcono = (TextView)findViewById(R.id.cerrrarDetallesIcono);
+        cerrarDetallesLayout = (LinearLayout)findViewById(R.id.cerrarDetalles);
+        cerrarFotoIcono = (TextView)findViewById(R.id.cerrrarFotoIcono);
+        cerrarFotoLayout = (LinearLayout)findViewById(R.id.cerrarFoto);
+        cerrarMapaIcono = (TextView)findViewById(R.id.cerrrarMapaIcono);
+        cerrarMapaLayout = (LinearLayout)findViewById(R.id.cerrarMapa);
+        fotoLayoutImagen = (LinearLayout)findViewById(R.id.fotoLayoutImagen);
+
+
+        cerrarDetallesIcono.setTypeface(Utils.setFont(GuardarActivity.this,"fontawesome",true));
+        cerrarFotoIcono.setTypeface(Utils.setFont(GuardarActivity.this,"fontawesome",true));
+        cerrarMapaIcono.setTypeface(Utils.setFont(GuardarActivity.this,"fontawesome",true));
 
     }
 
@@ -173,6 +193,8 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                 anadirDetallasImagen.setVisibility(View.GONE);
                 anadirDetallesTexto.setVisibility(View.VISIBLE);
                 anadirDetallesTexto.startAnimation(fadein);
+                cerrarDetallesLayout.setVisibility(View.VISIBLE);
+                anadirDetallasImagen.setVisibility(View.GONE);
 
             }
         });
@@ -196,7 +218,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
             }
         });
-        fotoLayoutDetalles.setOnClickListener(new View.OnClickListener() {
+        foto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -218,6 +240,38 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
                 guardar();
 
+            }
+        });
+        cerrarDetallesLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                anadirDetallesTexto.setVisibility(View.GONE);
+                anadirDetallasImagen.setVisibility(View.VISIBLE);
+                cerrarDetallesLayout.setVisibility(View.GONE);
+                plaza.setText("-");
+                piso.setText("-");
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.negro_view_seleccionado));
+                masDetallesTexto.setText("Mas detalles >");
+            }
+        });
+        cerrarFotoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rotatedBitmap = null;
+                foto.setImageBitmap(rotatedBitmap);
+                fotoLayoutDetalles.setVisibility(View.GONE);
+                fotoLayoutImagen.setVisibility(View.VISIBLE);
+                cerrarFotoLayout.setVisibility(View.GONE);
+            }
+        });
+        cerrarMapaLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mapaDetalles.setVisibility(View.GONE);
+                mapaImagen.setVisibility(View.VISIBLE);
+                map.clear();
+                lastLatitude = 0.0;
+                lastLongitude = 0.0;
             }
         });
 
@@ -341,11 +395,13 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                     anadirFotoLayout.setVisibility(View.GONE);
                     fotoLayoutDetalles.setVisibility(View.VISIBLE);
                     fotoLayoutDetalles.startAnimation(fadein);
+                    cerrarFotoLayout.setVisibility(View.VISIBLE);
 
                 } catch (Exception e) {
 
                     fotoLayoutDetalles.setVisibility(View.GONE);
                     anadirFotoLayout.setVisibility(View.VISIBLE);
+                    cerrarFotoLayout.setVisibility(View.GONE);
 
                 }
             }
@@ -353,6 +409,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
             fotoLayoutDetalles.setVisibility(View.GONE);
             anadirFotoLayout.setVisibility(View.VISIBLE);
+            cerrarFotoLayout.setVisibility(View.GONE);
 
         }
     }

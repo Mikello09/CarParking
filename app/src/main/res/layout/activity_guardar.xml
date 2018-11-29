@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:visibility="visible"
             android:id="@+id/anadirDetallesImagen"
             android:orientation="vertical">
             <ImageView
@@ -34,13 +33,33 @@
                 android:textSize="18dp"
                 android:textStyle="bold"/>
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/anadirDetallesTexto"
-            android:visibility="gone"
             android:layout_margin="5dp">
+            <LinearLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/shadow_view"
+                android:visibility="gone"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:id="@+id/cerrarDetalles">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cerrrarDetallesIcono"
+                    android:textColor="@color/texto_color"
+                    android:textSize="18dp"
+                    android:text="@string/cerrarIcono"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/anadirDetallesTexto"
+                android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -69,7 +88,7 @@
                         android:layout_marginTop="10dp"
                         android:id="@+id/pisoTexto"
                         android:textStyle="bold"
-                        android:textSize="14dp"
+                        android:textSize="18dp"
                         android:textColor="@color/texto_color"/>
                 </LinearLayout>
                 <LinearLayout
@@ -95,7 +114,7 @@
                         android:id="@+id/plazaTexto"
                         android:layout_marginTop="10dp"
                         android:textStyle="bold"
-                        android:textSize="14dp"
+                        android:textSize="18dp"
                         android:textColor="@color/texto_color"/>
                 </LinearLayout>
                 <LinearLayout
@@ -140,7 +159,8 @@
                     android:textColor="@color/texto_color"
                     android:textSize="16dp" />
             </LinearLayout>
-        </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -167,18 +187,39 @@
                 android:textSize="18dp"
                 android:textStyle="bold"/>
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/fotoLayoutDetalles"
-            android:visibility="gone"
-            android:layout_margin="10dp"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="150dp"
+            android:layout_margin="10dp">
+            <LinearLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/shadow_view"
+                android:visibility="gone"
+                android:gravity="center"
+                android:id="@+id/cerrarFoto">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cerrrarFotoIcono"
+                    android:textColor="@color/texto_color"
+                    android:textSize="18dp"
+                    android:text="@string/cerrarIcono"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/foto"/>
-        </LinearLayout>
+                android:id="@+id/fotoLayoutDetalles"
+                android:visibility="gone"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/foto"/>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -205,17 +246,38 @@
                 android:textSize="18dp"
                 android:textStyle="bold"/>
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/mapaLayoutDetalles"
             android:visibility="gone">
-            <fragment
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:id="@+id/mapa"/>
-        </LinearLayout>
+                android:layout_height="match_parent">
+                <fragment
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:id="@+id/mapa"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/shadow_view"
+                android:gravity="center"
+                android:id="@+id/cerrarMapa">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cerrrarMapaIcono"
+                    android:textColor="@color/texto_color"
+                    android:textSize="18dp"
+                    android:text="@string/cerrarIcono"/>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
