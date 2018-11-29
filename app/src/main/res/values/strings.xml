@@ -8,5 +8,7 @@
     <string name="buscarMiCoche">&#xf689;</string>
     <string name="parkingIcono">&#xf540;</string>
     <string name="alertIcono">&#xf071;</string>
+    <string name="tiempoIcono">&#xf2f2;</string>
+    <string name="distanciaIcono">&#xf018;</string>
 
 </resources>

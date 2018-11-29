@@ -4,10 +4,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Navigation.NavigationActivity">
-    <fragment
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/mapaNavigation"/>
+        android:layout_height="0dp"
+        android:layout_weight="0.9">
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:id="@+id/mapaNavigation"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:orientation="horizontal"
+        android:background="@color/azul">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/distanciaIcono"
+                android:text="@string/distanciaIcono"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/blanco"
+                android:textSize="20dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/distanciaTexto"
+                android:textColor="@color/blanco"
+                android:textSize="18dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tiempoIcono"
+                android:text="@string/tiempoIcono"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/blanco"
+                android:textSize="20dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tiempoTexto"
+                android:textColor="@color/blanco"
+                android:textSize="18dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
 </LinearLayout>

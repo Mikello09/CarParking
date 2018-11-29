@@ -231,7 +231,6 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
             imageToDB = baos.toByteArray();
-            rotatedBitmap.
         }
 
         DBOperations.addCoche(GuardarActivity.this,

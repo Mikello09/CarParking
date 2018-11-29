@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,6 +49,11 @@ import java.util.List;
 
 public class NavigationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private TextView distanciaTexto;
+    private TextView distanciaIcono;
+    private TextView tiempoTexto;
+    private TextView tiempoIcono;
+
     private GoogleMap map;
     private LocationManager mLocationManager;
     private String directionsApiKey = "AIzaSyDYExxjo__oIjI9cqwFkQt-2oq-kBfSdp8";
@@ -57,6 +63,13 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
     Double destinationLatitude = 0.0;
     Double destinationLongitude = 0.0;
+
+    String distancia = "";
+    String tiempo = "";
+
+    private Marker markerPersona;
+
+    private Boolean empezado = false;
 
 
     @Override
@@ -68,6 +81,18 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
         getExtras();
         configureMap();
+
+        onBind();
+    }
+
+    public void onBind(){
+        distanciaTexto = (TextView)findViewById(R.id.distanciaTexto);
+        distanciaIcono = (TextView)findViewById(R.id.distanciaIcono);
+        tiempoTexto = (TextView)findViewById(R.id.tiempoTexto);
+        tiempoIcono = (TextView)findViewById(R.id.tiempoIcono);
+
+        distanciaIcono.setTypeface(Utils.setFont(NavigationActivity.this,"fontawesome",true));
+        tiempoIcono.setTypeface(Utils.setFont(NavigationActivity.this,"fontawesome",true));
     }
 
     @Override
@@ -118,6 +143,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                                 lineOptions.color(NavigationActivity.this.getColor(R.color.azul));
                             }
                             map.addPolyline(lineOptions);
+                            distanciaTexto.setText(distancia);
+                            tiempoTexto.setText(tiempo);
                         }catch (JSONException e){
                             Utils.showToast(NavigationActivity.this,"JSON ERROR: " + e.getMessage());
                         }
@@ -167,31 +194,35 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                         @Override
                         public void onMyLocationChange(Location arg0) {
 
-                            float distancia = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
-                            if(distancia > 10) {
+                        float distancia = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
+                        if(distancia > 10) {
 
-                                map.clear();
-                                lastLatitude = arg0.getLatitude();
-                                lastLongitude = arg0.getLongitude();
+                            if(markerPersona != null)
+                                markerPersona.remove();
 
-                                LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
-                                MarkerOptions markerYo = new MarkerOptions();
-                                markerYo.position(yoLocation).title("Yo");
-                                markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
-                                map.addMarker(markerYo);
+                            lastLatitude = arg0.getLatitude();
+                            lastLongitude = arg0.getLongitude();
 
+                            LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
+                            MarkerOptions markerYo = new MarkerOptions();
+                            markerYo.position(yoLocation).title("Yo");
+                            markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
 
-                                LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
-                                MarkerOptions markerCar = new MarkerOptions();
-                                markerCar.position(carLocation).title("Coche");
-                                markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
-                                map.addMarker(markerCar);
+                            markerPersona = map.addMarker(markerYo);
 
-                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
 
-                                directionsVolley();
-                            }
+                        }
 
+                        if(!empezado){
+                            LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
+                            MarkerOptions markerCar = new MarkerOptions();
+                            markerCar.position(carLocation).title("Coche");
+                            markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
+                            map.addMarker(markerCar);
+
+                            directionsVolley();
+                        }
                         }
                     });
                 }
@@ -214,6 +245,12 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
             /** Traversing all routes */
             for(int i=0;i<jRoutes.length();i++){
                 jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
+
+                JSONObject distance = ((JSONObject)jLegs.get(0)).getJSONObject("distance");
+                distancia = distance.get("text").toString();
+                JSONObject duration = ((JSONObject)jLegs.get(0)).getJSONObject("duration");
+                tiempo = duration.getString("text");
+
                 List path = new ArrayList<>();
                 /** Traversing all legs */
                 for(int j=0;j<jLegs.length();j++){
