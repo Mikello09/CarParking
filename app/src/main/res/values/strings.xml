@@ -11,5 +11,10 @@
     <string name="tiempoIcono">&#xf2f2;</string>
     <string name="distanciaIcono">&#xf018;</string>
     <string name="cerrarIcono">&#xf00d;</string>
+    <string name="listaIcono">&#xf0ca;</string>
+    <string name="mapaIcono">&#xf5a0;</string>
+    <string name="opcionesIcono">&#xf013;</string>
+    <string name="refrescarIcono">&#xf2f1;</string>
+    <string name="cambioIcono">&#xf362;</string>
 
 </resources>

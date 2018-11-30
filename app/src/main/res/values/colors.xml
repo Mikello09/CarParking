@@ -13,6 +13,7 @@
 
     <color name="negro">#000000</color>
     <color name="azul">#4CB4FF</color>
+    <color name="azulClaro">#804CB4FF</color>
     <color name="amarillo">#FFFF00</color>
     <color name="rojo">#DF0101</color>
     <color name="blanco">#FFFFFF</color>

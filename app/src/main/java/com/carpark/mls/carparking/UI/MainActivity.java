@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -37,6 +38,7 @@ import com.carpark.mls.carparking.AppConfig.Coche;
 import com.carpark.mls.carparking.AppConfig.CustomLocation;
 import com.carpark.mls.carparking.AppConfig.Navigator;
 import com.carpark.mls.carparking.AppConfig.Parking;
+import com.carpark.mls.carparking.AppConfig.UserConfig;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.BD.DBOperations;
 import com.carpark.mls.carparking.Interfaces.EliminarInterface;
@@ -44,6 +46,13 @@ import com.carpark.mls.carparking.Interfaces.LocationInterface;
 import com.carpark.mls.carparking.Navigation.NavigationActivity;
 import com.carpark.mls.carparking.PopUp.Dialog;
 import com.carpark.mls.carparking.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.vision.text.Line;
 
 import org.json.JSONArray;
@@ -55,7 +64,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements EliminarInterface,LocationInterface {
+public class MainActivity extends AppCompatActivity implements EliminarInterface,LocationInterface,OnMapReadyCallback {
 
     private TextView aparcarIcono;
     private TextView buscarIcono;
@@ -69,6 +78,16 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     private RecyclerView lista;
     private ProgressBar espera;
     private LinearLayout listaLayout;
+    private TextView modoIcono;
+    private TextView opcionesIcono;
+    private TextView refrescarIcono;
+    private LinearLayout modoLayout;
+    private LinearLayout opcionesLayout;
+    private LinearLayout refrescarLayout;
+    private LinearLayout mapaLayout;
+    private GoogleMap map;
+    private List<Parking> listaParking;
+    private int contadorLocationChange = 0;
 
 
     ///ERROR LAYOUT
@@ -122,6 +141,13 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         colorDetail = (LinearLayout)findViewById(R.id.colorDetail);
         masDetallesDetail = (TextView)findViewById(R.id.masDetallesDetail);
         imagenDetail = (ImageView)findViewById(R.id.imagenDetail);
+        modoIcono = (TextView)findViewById(R.id.modoIcono);
+        opcionesIcono = (TextView)findViewById(R.id.opcionesIcono);
+        refrescarIcono = (TextView)findViewById(R.id.refrescarIcono);
+        modoLayout = (LinearLayout)findViewById(R.id.modoLayout);
+        opcionesLayout = (LinearLayout)findViewById(R.id.opcionesLayout);
+        refrescarLayout = (LinearLayout)findViewById(R.id.refrescarLayout);
+        mapaLayout = (LinearLayout)findViewById(R.id.mapaDetallesLayout);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
@@ -129,6 +155,9 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         alertIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         titulo.setTypeface(Utils.setFont(MainActivity.this,"playfair",false));
         codebounds.setTypeface(Utils.setFont(MainActivity.this,"sofia",false));
+        modoIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
+        opcionesIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
+        refrescarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
 
         listeners();
 
@@ -170,6 +199,30 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
             }
         });
 
+        modoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(UserConfig.getSharedPreferences(MainActivity.this).getModo().equals("lista")){
+                    UserConfig.saveSharedPreferences(MainActivity.this,"mapa",null,null);
+                }else{
+                    UserConfig.saveSharedPreferences(MainActivity.this,"lista",null,null);
+                }
+                estadoApp();
+            }
+        });
+        opcionesLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        refrescarLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                estadoApp();
+            }
+        });
+
     }
 
     public void estadoApp(){
@@ -192,16 +245,51 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         return;
     }
 
-    public void pruebaVolley(final String latitud, final String longitud){
+    public void firstPageVolley(final String latitud, final String longitud){
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-        String url ="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitud + "," + longitud + "&radius=5000&types=parking&sensor=false&key=" + placesAPI;
+        String url = "";
+        if(UserConfig.getSharedPreferences(MainActivity.this).getOrden().equals("distancia")){
+            url ="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitud + "," + longitud + "&rankby=distance&types=parking&sensor=false&key=" + placesAPI;
+        }else{
+            url ="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitud + "," + longitud + "&radius=" + UserConfig.getSharedPreferences(MainActivity.this).getRadio() + "&types=parking&sensor=false&key=" + placesAPI;
+        }
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
-                        obtenerLista(response,latitud,longitud);
+                        obtenerLista(response,latitud,longitud,true);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                errorLayout("Error en volley: " + error.getMessage());
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    public void secondPageVolley(final String latitud, final String longitud, String pageToken){
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+
+        String url = "";
+        if(UserConfig.getSharedPreferences(MainActivity.this).getOrden().equals("distancia")){
+            url ="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitud + "," + longitud + "&pagetoken=" + pageToken +"&rankby=distance&types=parking&sensor=false&key=" + placesAPI;
+        }else{
+            url ="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitud + "," + longitud + "&pagetoken=" + pageToken + "&radius=" + UserConfig.getSharedPreferences(MainActivity.this).getRadio() + "&types=parking&sensor=false&key=" + placesAPI;
+        }
+        
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        obtenerLista(response,latitud,longitud,false);
 
                     }
                 }, new Response.ErrorListener() {
@@ -232,9 +320,11 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         return new DecimalFormat("##.###").format(distance);
     }
 
-    public void obtenerLista(String response, String latitud, String longitud){
+    public void obtenerLista(String response, String latitud, String longitud, Boolean firstPage){
         try{
-            List<Parking> listaParking = new ArrayList<>();
+            if(firstPage){
+                listaParking = new ArrayList<>();
+            }
             JSONObject jsonObject = new JSONObject(response);
             JSONArray routesArray = jsonObject.getJSONArray("results");
             for(int i=0;i<routesArray.length();i++){
@@ -253,10 +343,26 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
                         rating);
                 listaParking.add(p);
             }
-            ParkingListaAdapter adapter = new ParkingListaAdapter(MainActivity.this, listaParking);
-            lista.setAdapter(adapter);
-            lista.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            if(firstPage){
+                if(jsonObject.has("next_page_token")){
+                    secondPageVolley(latitud,longitud,jsonObject.getString("next_page_token"));
+                    return;
+                }
+            }
+            if(UserConfig.getSharedPreferences(MainActivity.this).getModo().equals("lista")) {
+                ParkingListaAdapter adapter = new ParkingListaAdapter(MainActivity.this, listaParking);
+                lista.setAdapter(adapter);
+                lista.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                mapaLayout.setVisibility(View.GONE);
+                lista.setVisibility(View.VISIBLE);
+            }else{
+                lista.setVisibility(View.GONE);
+                mapaLayout.setVisibility(View.VISIBLE);
+                configureMapa();
+            }
             listaLayout();
+
+
         }catch (JSONException e){
             errorLayout("Error en JSON parse: " + e.getMessage());
         }
@@ -280,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
     @Override
     public void localizacion(Location location) {
-        pruebaVolley(Double.toString(location.getLatitude()),Double.toString(location.getLongitude()));
+        firstPageVolley(Double.toString(location.getLatitude()),Double.toString(location.getLongitude()));
     }
 
     @Override
@@ -348,6 +454,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     @Override
     protected void onResume() {
         super.onResume();
+
         estadoApp();
     }
 
@@ -394,6 +501,14 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
 
     }
 
+    public void configureMapa(){
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapaDetalles);
+        mapFragment.getMapAsync(this);
+
+    }
+
     public void errorLayout(String errorMessage){
         espera.setVisibility(View.GONE);
         listaLayout.setVisibility(View.GONE);
@@ -429,4 +544,58 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        map = googleMap;
+
+        contadorLocationChange = 0;
+
+
+        try{
+
+            map.setMyLocationEnabled(true);
+
+            if (map != null) {
+
+
+                map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+
+                    @Override
+                    public void onMyLocationChange(Location arg0) {
+
+                        if(contadorLocationChange == 0){
+                            Double myLatitude = arg0.getLatitude();
+                            Double myLongitude = arg0.getLongitude();
+
+                            LatLng myLocation = new LatLng(myLatitude, myLongitude);
+                            map.clear();
+
+                            MarkerOptions markerYo = new MarkerOptions();
+                            markerYo.position(myLocation).title("Yo");
+                            markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
+
+                            map.addMarker(markerYo);
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13.0f));
+
+                            for(int i=0;i<listaParking.size();i++){
+                                MarkerOptions markerParking = new MarkerOptions();
+                                LatLng parkingPosition = new LatLng(listaParking.get(i).getLatitude(),listaParking.get(i).getLongitude());
+                                markerParking.position(parkingPosition);
+                                markerParking.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
+                                markerParking.title(listaParking.get(i).getTitulo());
+                                map.addMarker(markerParking);
+                            }
+                        }
+                        contadorLocationChange ++;
+
+
+                    }
+                });
+            }
+        }catch(SecurityException e){
+
+            //NO HAY PERMISO
+        }
+    }
 }
