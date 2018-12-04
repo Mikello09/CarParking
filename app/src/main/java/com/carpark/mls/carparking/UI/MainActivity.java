@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LinearLayout colorDetail;
     private TextView masDetallesDetail;
     private ImageView imagenDetail;
+    private ImageView detallesImagenFondo;
 
 
 
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         refrescarLayout = (LinearLayout)findViewById(R.id.refrescarLayout);
         mapaLayout = (LinearLayout)findViewById(R.id.mapaDetallesLayout);
         imagenFondo = (ImageView)findViewById(R.id.imagenFondoError);
+        detallesImagenFondo = (ImageView)findViewById(R.id.detallesImagenFondo);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
@@ -470,6 +472,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         listaLayout.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         detailLayout.setVisibility(View.VISIBLE);
+        detallesImagenFondo.setImageDrawable(getDrawable(R.drawable.car_icon_opaque));
 
         Coche coche = coches.get(0);
 

@@ -207,6 +207,21 @@
             android:gravity="center"
             android:visibility="gone"
             android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="256dp"
+                    android:layout_height="256dp"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/detallesImagenFondo"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -217,7 +232,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="Tu coche esta en..."
-                    android:textColor="@color/azul"
+                    android:textColor="@color/gris"
                     android:textStyle="bold"
                     android:textSize="18dp"/>
             </LinearLayout>
@@ -355,6 +370,8 @@
                     android:textSize="18dp"
                     android:id="@+id/encontradoText"/>
             </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
