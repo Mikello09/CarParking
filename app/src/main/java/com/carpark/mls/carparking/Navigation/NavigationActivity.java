@@ -180,7 +180,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
         if(!gps_enabled || !network_enabled){
 
-            Dialog.dialogoGPS(NavigationActivity.this);
+            Dialog.dialogoBase(NavigationActivity.this,"gpsMain",false);
 
         }else{
             try{

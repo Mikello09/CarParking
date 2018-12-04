@@ -65,29 +65,29 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.9"
                 android:orientation="vertical">
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:visibility="gone"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:id="@+id/lista"></android.support.v7.widget.RecyclerView>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginRight="7dp"
-                    android:id="@+id/mapaDetallesLayout">
-                    <fragment
+                    <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:id="@+id/mapaDetalles"/>
-                </LinearLayout>
+                        android:layout_marginTop="5dp"
+                        android:visibility="gone"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/lista"></android.support.v7.widget.RecyclerView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginRight="7dp"
+                        android:id="@+id/mapaDetallesLayout">
+                        <fragment
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:id="@+id/mapaDetalles"/>
+                    </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

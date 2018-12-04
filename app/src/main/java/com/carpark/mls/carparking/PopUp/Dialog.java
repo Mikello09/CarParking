@@ -14,15 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.carpark.mls.carparking.AppConfig.Utils;
-import com.carpark.mls.carparking.Interfaces.DialogInterface;
-import com.carpark.mls.carparking.Interfaces.EliminarInterface;
-import com.carpark.mls.carparking.Interfaces.LocationInterface;
+import com.carpark.mls.carparking.Interfaces.GuardarInterface;
+import com.carpark.mls.carparking.Interfaces.MainInterface;
 import com.carpark.mls.carparking.R;
-import com.google.android.gms.vision.text.Line;
-
-import java.util.ArrayList;
-
-import javax.xml.transform.Templates;
 
 public class Dialog
 {
@@ -33,7 +27,7 @@ public class Dialog
 
     public static void dialogoTeclado(Context context, final String tipo, String numero){
 
-        final DialogInterface interfazNumero = (DialogInterface) context;
+        final GuardarInterface interfazNumero = (GuardarInterface) context;
 
         final android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -173,7 +167,7 @@ public class Dialog
     public static void dialogoColores(final Context context, String color){
 
 
-        final DialogInterface interfazColor = (DialogInterface) context;
+        final GuardarInterface interfazColor = (GuardarInterface) context;
 
         final android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -306,7 +300,7 @@ public class Dialog
     }
     public static void dialogoFoto(Context context, Bitmap foto){
 
-        final DialogInterface interfazFoto = (DialogInterface) context;
+        final GuardarInterface interfazFoto = (GuardarInterface) context;
 
         final android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -333,7 +327,7 @@ public class Dialog
     }
     public static void esperaDialog(Context context){
 
-        final DialogInterface interfazEspera = (DialogInterface) context;
+        final GuardarInterface interfazEspera = (GuardarInterface) context;
 
         final android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -353,58 +347,6 @@ public class Dialog
                 dialog.dismiss();
             }
         }, 3000);
-
-        dialog.show();
-
-    }
-    public static void dialogoGPS(Context context){
-
-        final DialogInterface interfazGps = (DialogInterface) context;
-
-        final android.app.Dialog dialog = new android.app.Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.gps_layout);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
-
-        TextView entendido = (TextView)dialog.findViewById(R.id.entendidoText);
-
-        entendido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                interfazGps.esconderMapa();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-    public static void eliminarCocheDialog(Context context, final Boolean guardar){
-
-        final EliminarInterface interfazEliminar = (EliminarInterface) context;
-
-        final android.app.Dialog dialog = new android.app.Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.eliminar_coche_dialog);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
-
-        TextView siTexto = (TextView)dialog.findViewById(R.id.siText);
-        TextView noTexto = (TextView)dialog.findViewById(R.id.noText);
-
-        siTexto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                interfazEliminar.eliminarAparcamiento(true, dialog,guardar);
-            }
-        });
-        noTexto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                interfazEliminar.eliminarAparcamiento(false, dialog,guardar);
-            }
-        });
 
         dialog.show();
 
@@ -433,7 +375,7 @@ public class Dialog
     }
     public static void dialogoMasDetalles(Context context, String texto){
 
-        final DialogInterface interfazDetalles = (DialogInterface) context;
+        final GuardarInterface interfazDetalles = (GuardarInterface) context;
 
         final android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -460,57 +402,139 @@ public class Dialog
 
         dialog.show();
     }
-    public static void dialogoGPSMain(Context context){
-        final LocationInterface interfazGps = (LocationInterface) context;
+
+    public static void dialogoBase(Context context, String tipo, final Boolean guardar){
 
         final android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
-        dialog.setContentView(R.layout.gps_main_dialog);
+        dialog.setContentView(R.layout.base_dialog);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
 
-        TextView entendido = (TextView)dialog.findViewById(R.id.okText);
-        TextView cancelar = (TextView)dialog.findViewById(R.id.cancelarText);
+        LinearLayout cerrar = (LinearLayout)dialog.findViewById(R.id.cerrarDialogoLayout);
+        TextView cerrarIcono = (TextView)dialog.findViewById(R.id.cerrarDialogo);
+        TextView titulo = (TextView)dialog.findViewById(R.id.tituloDialogo);
+        TextView subtitulo = (TextView)dialog.findViewById(R.id.subtituloDialogo);
+        TextView mensaje = (TextView)dialog.findViewById(R.id.mensajeDialogo);
+        TextView siBotonTexto = (TextView)dialog.findViewById(R.id.okDialogoTexto);
+        LinearLayout siBoton = (LinearLayout)dialog.findViewById(R.id.okDialogo);
+        TextView noBotonTexo = (TextView)dialog.findViewById(R.id.cancelarDialogoTexto);
+        LinearLayout noBoton = (LinearLayout)dialog.findViewById(R.id.cancelarDialogo);
+        ImageView imageFondo = (ImageView)dialog.findViewById(R.id.imageDialogo);
 
-        entendido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        cerrarIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
 
-                interfazGps.activarGPS();
-                dialog.dismiss();
-            }
-        });
-        cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                interfazGps.cancelarGPS();
-                dialog.dismiss();
-            }
-        });
-
+        switch (tipo){
+            case "gpsMain":
+                final MainInterface interfazGpsMain = (MainInterface) context;
+                titulo.setText(R.string.alertaMessage);
+                subtitulo.setText(R.string.subtituloGps);
+                mensaje.setText(R.string.gpsMessage);
+                siBotonTexto.setText(R.string.ok);
+                noBotonTexo.setText(R.string.ignorar);
+                imageFondo.setImageDrawable(context.getDrawable(R.drawable.location_icon_opaque));
+                siBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazGpsMain.activarGPS();
+                        dialog.dismiss();
+                    }
+                });
+                noBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazGpsMain.cancelarGPS();
+                        dialog.dismiss();
+                    }
+                });
+                cerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazGpsMain.cancelarGPS();
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            case "gpsGuardar":
+                final GuardarInterface interfazGpsGuardar = (GuardarInterface) context;
+                titulo.setText(R.string.alertaMessage);
+                subtitulo.setText(R.string.subtituloGps);
+                mensaje.setText(R.string.gpsMessage);
+                siBotonTexto.setText(R.string.entendido);
+                imageFondo.setImageDrawable(context.getDrawable(R.drawable.location_icon_opaque));
+                siBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazGpsGuardar.esconderMapa();
+                        dialog.dismiss();
+                    }
+                });
+                cerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazGpsGuardar.esconderMapa();
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            case "internet":
+                final MainInterface interfazInternet = (MainInterface) context;
+                titulo.setText(R.string.alertaMessage);
+                subtitulo.setText(R.string.subitituloInternet);
+                mensaje.setText(R.string.internetMessage);
+                siBotonTexto.setText(R.string.entendido);
+                noBotonTexo.setText(R.string.ignorar);
+                imageFondo.setImageDrawable(context.getDrawable(R.drawable.wifi_icon_opaque));
+                siBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazInternet.activarInternet();
+                        dialog.dismiss();
+                    }
+                });
+                noBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                cerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazInternet.activarInternet();
+                        dialog.dismiss();
+                    }
+                });
+                break;
+            case "eliminarCoche":
+                final MainInterface interfazEliminar = (MainInterface) context;
+                titulo.setText(R.string.alertaMessage);
+                subtitulo.setText(R.string.subitituloInternet);
+                mensaje.setText(R.string.internetMessage);
+                siBotonTexto.setText(R.string.si);
+                noBotonTexo.setText(R.string.no);
+                imageFondo.setImageDrawable(context.getDrawable(R.drawable.delete_icon_opaque));
+                siBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazEliminar.eliminarAparcamiento(true, dialog,guardar);
+                    }
+                });
+                noBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazEliminar.eliminarAparcamiento(false, dialog,guardar);
+                    }
+                });
+                cerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interfazEliminar.eliminarAparcamiento(false, dialog,guardar);
+                    }
+                });
+                break;
+        }
         dialog.show();
-    }
 
-    public static void dialogoInternet(Context context){
-        final LocationInterface interfazInternet = (LocationInterface) context;
-
-        final android.app.Dialog dialog = new android.app.Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.internet_dialog);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Para que se vean bien los bordes
-
-        TextView entendido = (TextView)dialog.findViewById(R.id.okText);
-
-        entendido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                interfazInternet.activarInternet();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
     }
 }

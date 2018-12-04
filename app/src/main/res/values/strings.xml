@@ -17,4 +17,19 @@
     <string name="refrescarIcono">&#xf2f1;</string>
     <string name="cambioIcono">&#xf362;</string>
 
+
+
+
+    <string name="gpsMessage">Parece que el GPS del telefono no está activo. Asegurate que el GPS y los permisos de geolocalización están activos.</string>
+    <string name="alertaMessage">ATENCIÓN</string>
+    <string name="subtituloGps">Hay problemas con el GPS</string>
+    <string name="ok">OK</string>
+    <string name="entendido">ENTENDIDO</string>
+    <string name="cancelar">CANCELAR</string>
+    <string name="ignorar">IGNORAR</string>
+    <string name="si">SI</string>
+    <string name="no">NO</string>
+    <string name="internetMessage">El teléfono no esta conectado a internet. Por favor conéctate a internet para poder utilizar todas las funciones de la aplicación</string>
+    <string name="subitituloInternet">Hay problemas con Internet</string>
+
 </resources>

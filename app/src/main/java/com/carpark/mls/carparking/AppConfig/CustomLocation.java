@@ -10,7 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
-import com.carpark.mls.carparking.Interfaces.LocationInterface;
+import com.carpark.mls.carparking.Interfaces.MainInterface;
 
 public class CustomLocation {
 
@@ -39,7 +39,7 @@ public class CustomLocation {
 
     public void getActualLocation(){
 
-        final LocationInterface interfazEspera = (LocationInterface) context;
+        final MainInterface interfazEspera = (MainInterface) context;
 
 
         locationListener = new LocationListener() {

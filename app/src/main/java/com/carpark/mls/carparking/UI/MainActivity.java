@@ -2,30 +2,22 @@ package com.carpark.mls.carparking.UI;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -41,8 +33,7 @@ import com.carpark.mls.carparking.AppConfig.Parking;
 import com.carpark.mls.carparking.AppConfig.UserConfig;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.BD.DBOperations;
-import com.carpark.mls.carparking.Interfaces.EliminarInterface;
-import com.carpark.mls.carparking.Interfaces.LocationInterface;
+import com.carpark.mls.carparking.Interfaces.MainInterface;
 import com.carpark.mls.carparking.Navigation.NavigationActivity;
 import com.carpark.mls.carparking.PopUp.Dialog;
 import com.carpark.mls.carparking.R;
@@ -53,7 +44,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.text.Line;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,7 +54,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements EliminarInterface,LocationInterface,OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, MainInterface {
 
     private TextView aparcarIcono;
     private TextView buscarIcono;
@@ -171,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
                 if(DBOperations.getCoches(MainActivity.this).size() == 0) {
                     Navigator.NavigateToGuardar(MainActivity.this);
                 }else {
-                    Dialog.eliminarCocheDialog(MainActivity.this,true);
+                    Dialog.dialogoBase(MainActivity.this, "eliminarCoche" ,true);
                 }
 
             }
@@ -195,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         encontradoText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog.eliminarCocheDialog(MainActivity.this,false);
+                Dialog.dialogoBase(MainActivity.this, "eliminarCoche",false);
             }
         });
 
@@ -434,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements EliminarInterface
         if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             getLocationMode();
         }else{
-            Dialog.dialogoGPSMain(MainActivity.this);
+            Dialog.dialogoBase(MainActivity.this,"gpsMain",false);
         }
     }
     public void getLocationMode()

@@ -1,45 +1,34 @@
 package com.carpark.mls.carparking.UI;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.carpark.mls.carparking.AppConfig.Navigator;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.BD.DBOperations;
-import com.carpark.mls.carparking.Interfaces.DialogInterface;
+import com.carpark.mls.carparking.Interfaces.GuardarInterface;
 import com.carpark.mls.carparking.PopUp.Dialog;
 import com.carpark.mls.carparking.R;
 import com.google.android.gms.location.LocationListener;
@@ -49,12 +38,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.text.Line;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
-public class GuardarActivity extends AppCompatActivity implements OnMapReadyCallback, DialogInterface {
+public class GuardarActivity extends AppCompatActivity implements OnMapReadyCallback, GuardarInterface {
 
 
     //MAPA VARS
@@ -451,7 +438,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
         if(!gps_enabled || !network_enabled){
 
-            Dialog.dialogoGPS(GuardarActivity.this);
+            Dialog.dialogoBase(GuardarActivity.this,"gpsGuardar",false);
 
         }else{
             try{
