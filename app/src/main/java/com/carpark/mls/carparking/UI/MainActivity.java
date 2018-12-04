@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         plazaDetail = (TextView)findViewById(R.id.plazaDetail);
         colorDetail = (LinearLayout)findViewById(R.id.colorDetail);
         masDetallesDetail = (TextView)findViewById(R.id.masDetallesDetail);
-        imagenDetail = (ImageView)findViewById(R.id.imagenDetail);
+        //imagenDetail = (ImageView)findViewById(R.id.imagenDetail);
         modoIcono = (TextView)findViewById(R.id.modoIcono);
         opcionesIcono = (TextView)findViewById(R.id.opcionesIcono);
         refrescarIcono = (TextView)findViewById(R.id.refrescarIcono);
@@ -480,7 +480,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         plazaDetail.setText(coche.getPlaza());
         colorDetail.setBackground(getBacgroundColor(coche.getColor()));
         masDetallesDetail.setText(coche.getDetalles().equals("") ? "No hay detalles" : coche.getDetalles());
-        if(coche.getFoto().equals(null)){
+        /*if(coche.getFoto().equals(null)){
             imagenDetail.setBackgroundResource(R.mipmap.coche_icon);
         }else{
 
@@ -491,7 +491,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             options.inTempStorage = new byte[1024 *32];
 
             imagenDetail.setImageBitmap(BitmapFactory.decodeByteArray(coche.getFoto(), 0, coche.getFoto().length,options));
-        }
+        }*/
 
 
     }
