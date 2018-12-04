@@ -40,12 +40,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.55"
+        android:layout_weight="0.65"
         android:background="@drawable/shadow_view_info"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
+        android:orientation="vertical"
         android:id="@+id/info_layout">
         <ProgressBar
             android:layout_width="50dp"
@@ -362,6 +364,21 @@
             android:visibility="gone"
             android:layout_margin="10dp"
             android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="256dp"
+                    android:layout_height="256dp"
+                    android:id="@+id/imagenFondoError"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_centerInParent="true"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -406,12 +423,14 @@
                     android:textStyle="bold"
                     android:textColor="@color/verde"/>
             </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.3"
+        android:layout_weight="0.2"
         android:id="@+id/botones_layout">
         <LinearLayout
             android:layout_width="0dp"
@@ -419,8 +438,10 @@
             android:layout_weight="0.5"
             android:gravity="center">
             <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
                 android:gravity="center"
                 android:background="@drawable/main_rectangle_view"
                 android:id="@+id/dondeEstaLayout"
@@ -449,8 +470,10 @@
             android:layout_weight="0.5"
             android:gravity="center">
             <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:gravity="center"
                 android:background="@drawable/main_rectangle_view"
                 android:id="@+id/guardarCocheLayout"

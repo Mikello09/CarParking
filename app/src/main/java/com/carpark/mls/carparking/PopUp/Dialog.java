@@ -509,8 +509,12 @@ public class Dialog
             case "eliminarCoche":
                 final MainInterface interfazEliminar = (MainInterface) context;
                 titulo.setText(R.string.alertaMessage);
-                subtitulo.setText(R.string.subitituloInternet);
-                mensaje.setText(R.string.internetMessage);
+                subtitulo.setText(R.string.subtituloEliminar);
+                if(guardar){
+                    mensaje.setText(R.string.eliminarMensajeGuardar);
+                }else{
+                    mensaje.setText(R.string.eliminarMensajeGuardar);
+                }
                 siBotonTexto.setText(R.string.si);
                 noBotonTexo.setText(R.string.no);
                 imageFondo.setImageDrawable(context.getDrawable(R.drawable.delete_icon_opaque));

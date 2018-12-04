@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView alertIcono;
     private TextView errorText;
     private TextView reintentar;
+    private ImageView imagenFondo;
 
     //DETAIL LAYOUT
     private TextView encontradoText;
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         opcionesLayout = (LinearLayout)findViewById(R.id.opcionesLayout);
         refrescarLayout = (LinearLayout)findViewById(R.id.refrescarLayout);
         mapaLayout = (LinearLayout)findViewById(R.id.mapaDetallesLayout);
+        imagenFondo = (ImageView)findViewById(R.id.imagenFondoError);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
@@ -223,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (Utils.hasInternetAccess(MainActivity.this)) {
                 permisoLocalizacion();
             } else {
-                errorLayout("No estas conectado a internet");
+                errorLayout("No estas conectado a internet","internet");
             }
         }else{
             detailLayout(coches);
@@ -256,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                errorLayout("Error en volley: " + error.getMessage());
+                errorLayout("Error en volley: " + error.getMessage(),"other");
             }
         });
 
@@ -285,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                errorLayout("Error en volley: " + error.getMessage());
+                errorLayout("Error en volley: " + error.getMessage(),"other");
             }
         });
 
@@ -354,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         }catch (JSONException e){
-            errorLayout("Error en JSON parse: " + e.getMessage());
+            errorLayout("Error en JSON parse: " + e.getMessage(),"other");
         }
     }
 
@@ -391,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void cancelarGPS() {
-        errorLayout("No tiene el GPS conectado");
+        errorLayout("No tiene el GPS conectado","gps");
     }
 
     private void permisoLocalizacion(){
@@ -437,7 +439,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 customLocation.getActualLocation();
             }
         }catch (Exception e){
-            errorLayout("Error en cambiar el modo de GPS");
+            errorLayout("Error en cambiar el modo de GPS","gps");
         }
     }
 
@@ -499,13 +501,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public void errorLayout(String errorMessage){
+    public void errorLayout(String errorMessage, String tipo){
         espera.setVisibility(View.GONE);
         listaLayout.setVisibility(View.GONE);
         errorLayout.setVisibility(View.VISIBLE);
         detailLayout.setVisibility(View.GONE);
 
         errorText.setText(errorMessage);
+
+        switch (tipo){
+            case "gps":
+                imagenFondo.setImageDrawable(getDrawable(R.drawable.location_icon_opaque));
+                break;
+            case "internet":
+                imagenFondo.setImageDrawable(getDrawable(R.drawable.wifi_icon_opaque));
+                break;
+            case "other":
+                imagenFondo.setImageDrawable(getDrawable(R.drawable.other_icon_opaque));
+                break;
+        }
+
     }
 
     public Drawable getBacgroundColor(String color){
@@ -572,7 +587,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 MarkerOptions markerParking = new MarkerOptions();
                                 LatLng parkingPosition = new LatLng(listaParking.get(i).getLatitude(),listaParking.get(i).getLongitude());
                                 markerParking.position(parkingPosition);
-                                markerParking.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
+                                markerParking.icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_image));
                                 markerParking.title(listaParking.get(i).getTitulo());
                                 map.addMarker(markerParking);
                             }
