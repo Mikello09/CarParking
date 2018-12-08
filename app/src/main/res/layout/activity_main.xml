@@ -55,17 +55,14 @@
             android:backgroundTint="@color/azul"
             android:id="@+id/esperaLista"
             android:visibility="gone"/>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/listaDetail"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.9"
+                android:layout_height="match_parent"
+                android:id="@+id/listaDetail"
+                android:visibility="gone"
                 android:orientation="vertical">
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
@@ -92,114 +89,86 @@
                     </LinearLayout>
             </LinearLayout>
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.1"
-                android:orientation="vertical">
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true">
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/azul"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginLeft="5dp"></LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33"
-                    android:id="@+id/modoLayout"
+                    android:id="@+id/mapaChooseLayout"
                     android:orientation="horizontal"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="@drawable/ripple_blue"
+                    android:background="@drawable/borde_no_seleccionado"
                     android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/modoIcono"
-                        android:textColor="@color/azul"
-                        android:text="@string/cambioIcono"
+                        android:id="@+id/mapaIcono"
+                        android:textColor="@color/blanco"
+                        android:text="@string/mapaIcono"
                         android:textSize="18dp"
                         android:layout_marginRight="5dp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/modoTexto"
-                        android:text="Modo"
+                        android:id="@+id/mapaTexto"
+                        android:text="Mapa"
                         android:textStyle="bold"
-                        android:textColor="@color/azul"
+                        android:textColor="@color/blanco"
                         android:textSize="16dp"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_width="1dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
-                    android:background="@color/azul"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"></LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33"
-                    android:gravity="center"
+                    android:id="@+id/listaChooseLayout"
+                    android:orientation="horizontal"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="@drawable/ripple_blue"
-                    android:id="@+id/opcionesLayout">
+                    android:background="@drawable/borde_no_seleccionado"
+                    android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/opcionesIcono"
+                        android:id="@+id/listaIcono"
                         android:textColor="@color/azul"
-                        android:text="@string/opcionesIcono"
+                        android:text="@string/listaIcono"
                         android:textSize="18dp"
                         android:layout_marginRight="5dp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/opcionesTexto"
-                        android:text="Opciones"
-                        android:textStyle="bold"
-                        android:textColor="@color/azul"
-                        android:textSize="16dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/azul"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"></LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="@drawable/ripple_blue"
-                    android:id="@+id/refrescarLayout">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/refrescarIcono"
-                        android:text="@string/refrescarIcono"
-                        android:textColor="@color/azul"
-                        android:textSize="18dp"
-                        android:layout_marginRight="5dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/refrescarTexto"
-                        android:text="Refrescar"
+                        android:id="@+id/listaTexto"
+                        android:text="Lista"
                         android:textStyle="bold"
                         android:textColor="@color/azul"
                         android:textSize="16dp"/>
                 </LinearLayout>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:background="@drawable/borde_seleccionado"
+                android:id="@+id/opcionesLayout">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/opcionesIcono"
+                    android:textColor="@color/blanco"
+                    android:text="@string/opcionesIcono"
+                    android:textSize="18dp"/>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

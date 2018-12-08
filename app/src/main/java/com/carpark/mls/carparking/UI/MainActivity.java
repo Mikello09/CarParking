@@ -14,7 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -44,6 +47,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.vision.text.Line;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,16 +72,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private RecyclerView lista;
     private ProgressBar espera;
     private LinearLayout listaLayout;
-    private TextView modoIcono;
     private TextView opcionesIcono;
-    private TextView refrescarIcono;
-    private LinearLayout modoLayout;
+    private LinearLayout mapaChooseLayout;
+    private LinearLayout listaChooseLayout;
+    private TextView mapaIcono;
+    private TextView listaIcono;
+    private TextView mapaTexto;
+    private TextView listaTexto;
     private LinearLayout opcionesLayout;
-    private LinearLayout refrescarLayout;
     private LinearLayout mapaLayout;
     private GoogleMap map;
     private List<Parking> listaParking;
     private int contadorLocationChange = 0;
+    private String scrolling = "down";
 
 
     ///ERROR LAYOUT
@@ -97,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageView imagenDetail;
     private ImageView detallesImagenFondo;
 
+    //ANIMATIONS
+    private Animation fadein;
+
 
 
     private final String placesAPI = "AIzaSyDYExxjo__oIjI9cqwFkQt-2oq-kBfSdp8";
@@ -112,6 +122,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void onBind(){
+
+        fadein = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 
         aparcarIcono = (TextView)findViewById(R.id.guardarCocheIcono);
         buscarIcono = (TextView)findViewById(R.id.dondeEstaIcono);
@@ -133,15 +145,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         colorDetail = (LinearLayout)findViewById(R.id.colorDetail);
         masDetallesDetail = (TextView)findViewById(R.id.masDetallesDetail);
         //imagenDetail = (ImageView)findViewById(R.id.imagenDetail);
-        modoIcono = (TextView)findViewById(R.id.modoIcono);
         opcionesIcono = (TextView)findViewById(R.id.opcionesIcono);
-        refrescarIcono = (TextView)findViewById(R.id.refrescarIcono);
-        modoLayout = (LinearLayout)findViewById(R.id.modoLayout);
         opcionesLayout = (LinearLayout)findViewById(R.id.opcionesLayout);
-        refrescarLayout = (LinearLayout)findViewById(R.id.refrescarLayout);
         mapaLayout = (LinearLayout)findViewById(R.id.mapaDetallesLayout);
         imagenFondo = (ImageView)findViewById(R.id.imagenFondoError);
         detallesImagenFondo = (ImageView)findViewById(R.id.detallesImagenFondo);
+        mapaIcono = (TextView)findViewById(R.id.mapaIcono);
+        listaIcono = (TextView)findViewById(R.id.listaIcono);
+        mapaChooseLayout = (LinearLayout)findViewById(R.id.mapaChooseLayout);
+        listaChooseLayout = (LinearLayout)findViewById(R.id.listaChooseLayout);
+        mapaTexto = (TextView)findViewById(R.id.mapaTexto);
+        listaTexto = (TextView)findViewById(R.id.listaTexto);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
@@ -149,14 +163,38 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         alertIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         titulo.setTypeface(Utils.setFont(MainActivity.this,"playfair",false));
         codebounds.setTypeface(Utils.setFont(MainActivity.this,"sofia",false));
-        modoIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         opcionesIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
-        refrescarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
+        mapaIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
+        listaIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
 
         listeners();
 
     }
     public void listeners(){
+
+
+        lista.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy > 0) {
+                    // Scrolling up
+                    mapaChooseLayout.setVisibility(View.GONE);
+                    listaChooseLayout.setVisibility(View.GONE);
+                    scrolling = "up";
+                } else {
+                    // Scrolling down
+                    if(scrolling.equals("up")){
+                        mapaChooseLayout.setVisibility(View.VISIBLE);
+                        listaChooseLayout.setVisibility(View.VISIBLE);
+                        mapaChooseLayout.startAnimation(fadein);
+                        listaChooseLayout.startAnimation(fadein);
+                    }
+                    scrolling = "down";
+                }
+            }
+        });
 
         guardarLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        modoLayout.setOnClickListener(new View.OnClickListener() {
+        /*modoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(UserConfig.getSharedPreferences(MainActivity.this).getModo().equals("lista")){
@@ -203,17 +241,32 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 estadoApp();
             }
+        });*/
+        listaChooseLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!UserConfig.getSharedPreferences(MainActivity.this).getModo().equals("lista")){
+                    UserConfig.saveSharedPreferences(MainActivity.this,"lista",null,null);
+                    estadoApp();
+                }
+            }
         });
+
+        mapaChooseLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!UserConfig.getSharedPreferences(MainActivity.this).getModo().equals("mapa")){
+                    UserConfig.saveSharedPreferences(MainActivity.this,"mapa",null,null);
+                    estadoApp();
+                }
+            }
+        });
+
+
         opcionesLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-            }
-        });
-        refrescarLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                estadoApp();
             }
         });
 
@@ -344,14 +397,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
             if(UserConfig.getSharedPreferences(MainActivity.this).getModo().equals("lista")) {
+                listaChooseLayout.setBackground(getDrawable(R.drawable.borde_seleccionado));
+                mapaChooseLayout.setBackground(getDrawable(R.drawable.borde_no_seleccionado));
                 ParkingListaAdapter adapter = new ParkingListaAdapter(MainActivity.this, listaParking);
                 lista.setAdapter(adapter);
                 lista.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                 mapaLayout.setVisibility(View.GONE);
                 lista.setVisibility(View.VISIBLE);
+                listaIcono.setTextColor(getResources().getColor(R.color.blanco));
+                listaTexto.setTextColor(getResources().getColor(R.color.blanco));
+                mapaIcono.setTextColor(getResources().getColor(R.color.azul));
+                mapaTexto.setTextColor(getResources().getColor(R.color.azul));
             }else{
+                listaChooseLayout.setBackground(getDrawable(R.drawable.borde_no_seleccionado));
+                mapaChooseLayout.setBackground(getDrawable(R.drawable.borde_seleccionado));
                 lista.setVisibility(View.GONE);
                 mapaLayout.setVisibility(View.VISIBLE);
+                listaIcono.setTextColor(getResources().getColor(R.color.azul));
+                listaTexto.setTextColor(getResources().getColor(R.color.azul));
+                mapaIcono.setTextColor(getResources().getColor(R.color.blanco));
+                mapaTexto.setTextColor(getResources().getColor(R.color.blanco));
                 configureMapa();
             }
             listaLayout();
@@ -458,6 +523,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         listaLayout.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         detailLayout.setVisibility(View.GONE);
+        mapaChooseLayout.setVisibility(View.GONE);
+        listaChooseLayout.setVisibility(View.GONE);
+        opcionesLayout.setVisibility(View.GONE);
     }
 
     public void listaLayout(){
@@ -465,6 +533,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         listaLayout.setVisibility(View.VISIBLE);
         errorLayout.setVisibility(View.GONE);
         detailLayout.setVisibility(View.GONE);
+        mapaChooseLayout.setVisibility(View.VISIBLE);
+        listaChooseLayout.setVisibility(View.VISIBLE);
+        opcionesLayout.setVisibility(View.VISIBLE);
     }
 
     public void detailLayout(List<Coche> coches){
