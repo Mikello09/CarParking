@@ -21,6 +21,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -104,6 +107,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageView imagenDetail;
     private ImageView detallesImagenFondo;
 
+    //OPCIONES LAYOUT
+    private LinearLayout opcionesDetail;
+    private LinearLayout cerrarOpcionesLayout;
+    private TextView cerrarOpcionesIcono;
+    private RadioGroup opcionesRadio;
+    private RadioButton masCercanoRadio;
+    private RadioButton distanciaRadio;
+    private SeekBar seekbar;
+    private TextView seekbarValue;
+    private TextView guardarOpciones;
+    private String radio;
+    private LinearLayout radioLayout;
+
     //ANIMATIONS
     private Animation fadein;
 
@@ -156,6 +172,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         listaChooseLayout = (LinearLayout)findViewById(R.id.listaChooseLayout);
         mapaTexto = (TextView)findViewById(R.id.mapaTexto);
         listaTexto = (TextView)findViewById(R.id.listaTexto);
+        opcionesDetail = (LinearLayout)findViewById(R.id.opcionesDetail);
+        cerrarOpcionesLayout = (LinearLayout)findViewById(R.id.close_opciones);
+        cerrarOpcionesIcono = (TextView)findViewById(R.id.close_opciones_icon);
+        opcionesRadio = (RadioGroup)findViewById(R.id.opcionesRadio);
+        masCercanoRadio = (RadioButton)findViewById(R.id.cercanosRadioButton);
+        distanciaRadio = (RadioButton)findViewById(R.id.distanciaRadioButton);
+        seekbar = (SeekBar)findViewById(R.id.seekbar);
+        seekbarValue = (TextView)findViewById(R.id.seekbarValue);
+        guardarOpciones = (TextView)findViewById(R.id.guardarOpciones);
+        radioLayout = (LinearLayout)findViewById(R.id.radioLayout);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
@@ -166,11 +192,62 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         opcionesIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         mapaIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         listaIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
+        cerrarOpcionesIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
 
         listeners();
 
     }
     public void listeners(){
+
+
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                radio = Integer.toString(progress + 1) + "000";
+                seekbarValue.setText(Integer.toString(progress + 1) + " km");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        opcionesRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if(checkedId == R.id.cercanosRadioButton){
+                    radioLayout.setVisibility(View.VISIBLE);
+                }else{
+                    radioLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        cerrarOpcionesLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                estadoApp();
+            }
+        });
+
+        guardarOpciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(masCercanoRadio.isChecked()){
+                    UserConfig.saveSharedPreferences(MainActivity.this,null,"cercano",radio);
+                }else{
+                    UserConfig.saveSharedPreferences(MainActivity.this,null,"distancia",null);
+                }
+                estadoApp();
+            }
+        });
 
 
         lista.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -231,17 +308,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        /*modoLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(UserConfig.getSharedPreferences(MainActivity.this).getModo().equals("lista")){
-                    UserConfig.saveSharedPreferences(MainActivity.this,"mapa",null,null);
-                }else{
-                    UserConfig.saveSharedPreferences(MainActivity.this,"lista",null,null);
-                }
-                estadoApp();
-            }
-        });*/
         listaChooseLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -266,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         opcionesLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                opcionesLayout();
             }
         });
 
@@ -518,6 +584,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //////INFO VISIBILITY
+    public void opcionesLayout(){
+
+        opcionesDetail.setVisibility(View.VISIBLE);
+        espera.setVisibility(View.GONE);
+        listaLayout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
+        detailLayout.setVisibility(View.GONE);
+        if(UserConfig.getSharedPreferences(MainActivity.this).getOrden().equals("distancia")){
+            distanciaRadio.setChecked(true);
+            radioLayout.setVisibility(View.GONE);
+        }else{
+            masCercanoRadio.setChecked(true);
+            radioLayout.setVisibility(View.VISIBLE);
+            radio = UserConfig.getSharedPreferences(MainActivity.this).getRadio();
+            if(radio.equals("10000")){
+                seekbar.setProgress(10);
+            }else{
+                seekbar.setProgress(Character.getNumericValue(radio.charAt(0)) - 1);
+            }
+
+        }
+
+    }
+
     public void esperaLayout(){
         espera.setVisibility(View.VISIBLE);
         listaLayout.setVisibility(View.GONE);
@@ -526,6 +616,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapaChooseLayout.setVisibility(View.GONE);
         listaChooseLayout.setVisibility(View.GONE);
         opcionesLayout.setVisibility(View.GONE);
+        opcionesDetail.setVisibility(View.GONE);
     }
 
     public void listaLayout(){
@@ -629,6 +720,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map = googleMap;
 
         contadorLocationChange = 0;
+        map.clear();
 
 
         try{
@@ -667,8 +759,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             }
                         }
                         contadorLocationChange ++;
-
-
                     }
                 });
             }

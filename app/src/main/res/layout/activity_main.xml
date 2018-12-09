@@ -55,15 +55,15 @@
             android:backgroundTint="@color/azul"
             android:id="@+id/esperaLista"
             android:visibility="gone"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/listaDetail"
                 android:visibility="gone"
                 android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -80,6 +80,7 @@
                         android:layout_marginTop="7dp"
                         android:layout_marginLeft="7dp"
                         android:layout_marginRight="7dp"
+                        android:layout_marginBottom="7dp"
                         android:id="@+id/mapaDetallesLayout">
                         <fragment
                             android:layout_width="match_parent"
@@ -87,88 +88,220 @@
                             android:name="com.google.android.gms.maps.SupportMapFragment"
                             android:id="@+id/mapaDetalles"/>
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="20dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true">
+                        <LinearLayout
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/mapaChooseLayout"
+                            android:orientation="horizontal"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="@drawable/borde_no_seleccionado"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/mapaIcono"
+                                android:textColor="@color/blanco"
+                                android:text="@string/mapaIcono"
+                                android:textSize="18dp"
+                                android:layout_marginRight="5dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/mapaTexto"
+                                android:text="Mapa"
+                                android:textStyle="bold"
+                                android:textColor="@color/blanco"
+                                android:textSize="16dp"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/listaChooseLayout"
+                            android:orientation="horizontal"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="@drawable/borde_no_seleccionado"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/listaIcono"
+                                android:textColor="@color/azul"
+                                android:text="@string/listaIcono"
+                                android:textSize="18dp"
+                                android:layout_marginRight="5dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/listaTexto"
+                                android:text="Lista"
+                                android:textStyle="bold"
+                                android:textColor="@color/azul"
+                                android:textSize="16dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:background="@drawable/borde_seleccionado"
+                        android:id="@+id/opcionesLayout">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/opcionesIcono"
+                            android:textColor="@color/blanco"
+                            android:text="@string/opcionesIcono"
+                            android:textSize="18dp"/>
+                    </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:orientation="horizontal"
-                android:layout_marginBottom="20dp"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/opcionesDetail"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="256dp"
+                    android:layout_height="256dp"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/settings_icon_opaque"/>
                 <LinearLayout
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/mapaChooseLayout"
-                    android:orientation="horizontal"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="@drawable/borde_no_seleccionado"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/close_opciones"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
                     android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/mapaIcono"
-                        android:textColor="@color/blanco"
-                        android:text="@string/mapaIcono"
-                        android:textSize="18dp"
-                        android:layout_marginRight="5dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/mapaTexto"
-                        android:text="Mapa"
-                        android:textStyle="bold"
-                        android:textColor="@color/blanco"
-                        android:textSize="16dp"/>
+                        android:id="@+id/close_opciones_icon"
+                        android:text="@string/cerrarIcono"
+                        android:textColor="@color/rojo"
+                        android:textSize="20dp"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/listaChooseLayout"
-                    android:orientation="horizontal"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="@drawable/borde_no_seleccionado"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/listaIcono"
-                        android:textColor="@color/azul"
-                        android:text="@string/listaIcono"
-                        android:textSize="18dp"
-                        android:layout_marginRight="5dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/listaTexto"
-                        android:text="Lista"
-                        android:textStyle="bold"
-                        android:textColor="@color/azul"
-                        android:textSize="16dp"/>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="20dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:background="@drawable/borde_seleccionado"
-                android:id="@+id/opcionesLayout">
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@id/close_opciones"
+                    android:background="@color/azul"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/separadorOpciones"></LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/opcionesIcono"
-                    android:textColor="@color/blanco"
-                    android:text="@string/opcionesIcono"
-                    android:textSize="18dp"/>
-            </LinearLayout>
-        </RelativeLayout>
+                    android:text="OPCIONES"
+                    android:textColor="@color/texto_color"
+                    android:textSize="22dp"
+                    android:textStyle="bold"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ordenar por:"
+                    android:textColor="@color/gris"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="20dp"
+                    android:layout_alignTop="@id/separadorOpciones"/>
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/separadorOpciones"
+                    android:id="@+id/opcionesRadio"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginLeft="40dp">
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/cercanosRadioButton"
+                        android:textSize="24dp"
+                        android:textColor="@color/gris"
+                        android:text="Más cercanos"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:id="@+id/distanciaRadioButton"
+                        android:textSize="24dp"
+                        android:textColor="@color/gris"
+                        android:text="Distancia"/>
+                </RadioGroup>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_alignBottom="@+id/guardarOpciones"
+                    android:id="@+id/radioLayout"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginBottom="50dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Radio: "
+                            android:textSize="24dp"
+                            android:textColor="@color/gris" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="24dp"
+                            android:textColor="@color/gris"
+                            android:id="@+id/seekbarValue"/>
+                    </LinearLayout>
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:id="@+id/seekbar"
+                        android:max="9" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:text="GUARDAR"
+                    android:id="@+id/guardarOpciones"
+                    android:textColor="@color/verde"
+                    android:textStyle="bold"
+                    android:textSize="22dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"/>
+
+            </RelativeLayout>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
