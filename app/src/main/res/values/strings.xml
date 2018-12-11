@@ -19,7 +19,10 @@
 
 
 
-
+    <string name="encontradoTitulo">ENHORABUENA</string>
+    <string name="encontradoSubtitulo">Has encontrado tu coche</string>
+    <string name="encontradoTexto">Has encontrado tu coche. ¿Es correcto?</string>
+    <string name="todaviaNo">TODAVÍA NO</string>
     <string name="gpsMessage">Parece que el GPS del telefono no está activo. Asegurate que el GPS y los permisos de geolocalización están activos.</string>
     <string name="alertaMessage">ATENCIÓN</string>
     <string name="subtituloGps">Hay problemas con el GPS</string>

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.Interfaces.GuardarInterface;
 import com.carpark.mls.carparking.Interfaces.MainInterface;
+import com.carpark.mls.carparking.Interfaces.NavigationInterface;
 import com.carpark.mls.carparking.R;
 
 public class Dialog
@@ -403,7 +404,7 @@ public class Dialog
         dialog.show();
     }
 
-    public static void dialogoBase(Context context, String tipo, final Boolean guardar){
+    public static void dialogoBase(final Context context, String tipo, final Boolean guardar){
 
         final android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -425,6 +426,52 @@ public class Dialog
         cerrarIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
 
         switch (tipo){
+            case "encontrado":
+
+                titulo.setText(R.string.encontradoTitulo);
+                subtitulo.setText(R.string.encontradoSubtitulo);
+                mensaje.setText(R.string.encontradoTexto);
+                siBotonTexto.setText(R.string.si);
+                noBotonTexo.setText(R.string.todaviaNo);
+                imageFondo.setImageDrawable(context.getDrawable(R.drawable.chek_icon_opaque));
+                siBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(guardar){
+                            MainInterface mainInterface = (MainInterface) context;
+                            mainInterface.encontrado(true, dialog);
+                        }else{
+                            NavigationInterface navigationInterface = (NavigationInterface) context;
+                            navigationInterface.encontrado(true, dialog);
+                        }
+                    }
+                });
+                noBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(guardar){
+                            MainInterface mainInterface = (MainInterface) context;
+                            mainInterface.encontrado(false, dialog);
+                        }else{
+                            NavigationInterface navigationInterface = (NavigationInterface) context;
+                            navigationInterface.encontrado(false, dialog);
+                        }
+                    }
+                });
+                cerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(guardar){
+                            MainInterface mainInterface = (MainInterface) context;
+                            mainInterface.encontrado(false, dialog);
+                        }else{
+                            NavigationInterface navigationInterface = (NavigationInterface) context;
+                            navigationInterface.encontrado(false, dialog);
+                        }
+                    }
+                });
+
+                break;
             case "gpsMain":
                 final MainInterface interfazGpsMain = (MainInterface) context;
                 titulo.setText(R.string.alertaMessage);

@@ -1,6 +1,7 @@
 package com.carpark.mls.carparking.UI;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +39,7 @@ import com.carpark.mls.carparking.AppConfig.Coche;
 import com.carpark.mls.carparking.AppConfig.CustomLocation;
 import com.carpark.mls.carparking.AppConfig.Navigator;
 import com.carpark.mls.carparking.AppConfig.Parking;
+import com.carpark.mls.carparking.AppConfig.ResizeAnimation;
 import com.carpark.mls.carparking.AppConfig.UserConfig;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.BD.DBOperations;
@@ -283,8 +286,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
 
                 if(DBOperations.getCoches(MainActivity.this).size() == 0) {
+                    ResizeAnimation resize = new ResizeAnimation(guardarLayout,
+                                                guardarLayout.getWidth(),
+                                                guardarLayout.getHeight(),
+                                                guardarLayout.getWidth() + 30,
+                                                guardarLayout.getHeight() +30);
                     Navigator.NavigateToGuardar(MainActivity.this);
                 }else {
+                    shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shaking);
+                    guardarLayout.startAnimation(shake);
                     Dialog.dialogoBase(MainActivity.this, "eliminarCoche" ,true);
                 }
 
@@ -327,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         encontradoText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog.dialogoBase(MainActivity.this, "eliminarCoche",false);
+                Dialog.dialogoBase(MainActivity.this, "encontrado",true);
             }
         });
 
@@ -513,6 +523,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }catch (JSONException e){
             errorLayout("Error en JSON parse: " + e.getMessage(),"other");
+        }
+    }
+
+    @Override
+    public void encontrado(Boolean encontrado, android.app.Dialog dialogo) {
+        dialogo.dismiss();
+        if (encontrado) {
+            DBOperations.eliminarCoches(MainActivity.this);
+            estadoApp();
         }
     }
 

@@ -22,6 +22,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.carpark.mls.carparking.AppConfig.Navigator;
 import com.carpark.mls.carparking.AppConfig.Utils;
+import com.carpark.mls.carparking.BD.DBOperations;
+import com.carpark.mls.carparking.Interfaces.NavigationInterface;
 import com.carpark.mls.carparking.PopUp.Dialog;
 import com.carpark.mls.carparking.R;
 import com.carpark.mls.carparking.UI.GuardarActivity;
@@ -47,7 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class NavigationActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class NavigationActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationInterface {
 
     private TextView distanciaTexto;
     private TextView distanciaIcono;
@@ -200,7 +202,6 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                         @Override
                         public void onMyLocationChange(Location arg0) {
 
-
                         if(!empezado){
                             empezado = true;
                             LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
@@ -225,26 +226,28 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                         }else{
 
                             float distancia = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
-                            if(distancia > 10) {
-
-                                if(markerPersona != null)
-                                    markerPersona.remove();
-
-                                lastLatitude = arg0.getLatitude();
-                                lastLongitude = arg0.getLongitude();
-
-                                LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
-                                MarkerOptions markerYo = new MarkerOptions();
-                                markerYo.position(yoLocation).title("Yo");
-                                markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
-
-                                markerPersona = map.addMarker(markerYo);
-
-                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
-                                primeraVez = false;
-                                directionsVolley();
-
+                            if(distancia < 2) {
+                                Dialog.dialogoBase(NavigationActivity.this, "encontrado", false);
                             }
+                            if(distancia > 10) {
+                                    if(markerPersona != null)
+                                        markerPersona.remove();
+
+                                    lastLatitude = arg0.getLatitude();
+                                    lastLongitude = arg0.getLongitude();
+
+                                    LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
+                                    MarkerOptions markerYo = new MarkerOptions();
+                                    markerYo.position(yoLocation).title("Yo");
+                                    markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
+
+                                    markerPersona = map.addMarker(markerYo);
+
+                                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
+                                    primeraVez = false;
+                                    directionsVolley();
+                            }
+
                         }
                         }
                     });
@@ -281,6 +284,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                     /** Traversing all steps */
                     for(int k=0;k<jSteps.length();k++){
                         primeraVez = true;
+                        if(jStepsGuardados == null)
+                            jStepsGuardados = jSteps;
                         for(int sg=0;sg<jStepsGuardados.length();sg++){
                             if(jSteps.get(0) == jStepsGuardados.get(i)){
                                 primeraVez = false;
@@ -352,5 +357,17 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         float distance = loc1.distanceTo(loc2);
 
         return distance;
+    }
+
+
+    @Override
+    public void encontrado(Boolean encontrado, android.app.Dialog dialogo) {
+        if(encontrado){
+            map = null;
+            DBOperations.eliminarCoches(NavigationActivity.this);
+            Navigator.NavigateToMain(NavigationActivity.this);
+        }else{
+            dialogo.dismiss();
+        }
     }
 }
