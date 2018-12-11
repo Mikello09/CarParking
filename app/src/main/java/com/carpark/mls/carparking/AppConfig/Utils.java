@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.net.HttpURLConnection;
@@ -35,5 +38,11 @@ public class Utils {
         }else {
             return false;
         }
+    }
+
+    public static void showSnack(FrameLayout layout, String mensaje){
+        Snackbar snackbar = Snackbar.make(layout, mensaje, Snackbar.LENGTH_LONG);
+        snackbar.show();
+
     }
 }

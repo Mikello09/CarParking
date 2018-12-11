@@ -2,6 +2,7 @@ package com.carpark.mls.carparking.UI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,10 +54,12 @@ public class ParkingListaAdapter extends RecyclerView.Adapter<ParkingListaAdapte
             @Override
             public void onClick(View v) {
 
-                Intent iNavigation = new Intent(context,NavigationActivity.class);
-                iNavigation.putExtra("lat",lista.get(posicion).getLatitude());
-                iNavigation.putExtra("lng",lista.get(posicion).getLongitude());
-                context.startActivity(iNavigation);
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lista.get(posicion).getLatitude()
+                                                + "," +  lista.get(posicion).getLongitude()
+                                                + "&mode=d");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                context.startActivity(mapIntent);
             }
         });
 

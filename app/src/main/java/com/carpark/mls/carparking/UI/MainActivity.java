@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -62,6 +63,8 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, MainInterface {
+
+    private FrameLayout mainFrame;
 
     private TextView aparcarIcono;
     private TextView buscarIcono;
@@ -122,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //ANIMATIONS
     private Animation fadein;
+    private Animation shake;
 
 
 
@@ -141,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         fadein = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 
+        mainFrame = (FrameLayout)findViewById(R.id.mainFrame);
         aparcarIcono = (TextView)findViewById(R.id.guardarCocheIcono);
         buscarIcono = (TextView)findViewById(R.id.dondeEstaIcono);
         titulo = (TextView)findViewById(R.id.titulo_text);
@@ -289,8 +294,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         buscarLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iNavigation = new Intent(MainActivity.this,NavigationActivity.class);
-                startActivity(iNavigation);
+
+                List<Coche> coches = DBOperations.getCoches(MainActivity.this);
+                if(coches.size() != 0){
+                    if(!coches.get(0).getLatitud().equals("0.0") & !coches.get(0).getLongitud().equals("0.0")) {
+                        Intent iNavigation = new Intent(MainActivity.this, NavigationActivity.class);
+                        iNavigation.putExtra("lat", coches.get(0).getLatitud());
+                        iNavigation.putExtra("lng", coches.get(0).getLongitud());
+                        startActivity(iNavigation);
+                    }else{
+                        shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shaking);
+                        buscarLayout.startAnimation(shake);
+                        Utils.showSnack(mainFrame,"No hay ubicación guardada");
+                    }
+                }else{
+                    shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shaking);
+                    buscarLayout.startAnimation(shake);
+                    Utils.showSnack(mainFrame,"No hay ningún coche guardado");
+                }
+
+
             }
         });
 
