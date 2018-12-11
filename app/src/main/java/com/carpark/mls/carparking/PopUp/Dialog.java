@@ -460,7 +460,7 @@ public class Dialog
                 titulo.setText(R.string.alertaMessage);
                 subtitulo.setText(R.string.subtituloGps);
                 mensaje.setText(R.string.gpsMessage);
-                siBotonTexto.setText(R.string.entendido);
+                siBotonTexto.setText(R.string.ok);
                 imageFondo.setImageDrawable(context.getDrawable(R.drawable.location_icon_opaque));
                 siBoton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -482,7 +482,7 @@ public class Dialog
                 titulo.setText(R.string.alertaMessage);
                 subtitulo.setText(R.string.subitituloInternet);
                 mensaje.setText(R.string.internetMessage);
-                siBotonTexto.setText(R.string.entendido);
+                siBotonTexto.setText(R.string.ok);
                 noBotonTexo.setText(R.string.ignorar);
                 imageFondo.setImageDrawable(context.getDrawable(R.drawable.wifi_icon_opaque));
                 siBoton.setOnClickListener(new View.OnClickListener() {
