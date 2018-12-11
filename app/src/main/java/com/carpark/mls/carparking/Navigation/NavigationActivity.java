@@ -71,6 +71,10 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
     private Boolean empezado = false;
 
+    private JSONArray jStepsGuardados;
+
+    private boolean primeraVez = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +107,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
     public void getExtras(){
 
-        destinationLatitude = getIntent().getExtras().getDouble("lat");
-        destinationLongitude = getIntent().getExtras().getDouble("lng");
+        destinationLatitude = Double.parseDouble(getIntent().getExtras().getString("lat"));
+        destinationLongitude = Double.parseDouble(getIntent().getExtras().getString("lng"));
     }
 
     public void configureMap(){
@@ -125,24 +129,26 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             List<List<HashMap<String,String>>> result = parse(jsonObject);
-                            ArrayList<LatLng> points;
-                            PolylineOptions lineOptions = null;
-                            for (int i = 0; i < result.size(); i++) {
-                                points = new ArrayList<>();
-                                lineOptions = new PolylineOptions();
-                                List<HashMap<String, String>> path = result.get(i);
-                                for (int j = 0; j < path.size(); j++) {
-                                    HashMap<String, String> point = path.get(j);
-                                    double lat = Double.parseDouble(point.get("lat"));
-                                    double lng = Double.parseDouble(point.get("lng"));
-                                    LatLng position = new LatLng(lat, lng);
-                                    points.add(position);
+                            if(primeraVez){
+                                ArrayList<LatLng> points;
+                                PolylineOptions lineOptions = null;
+                                for (int i = 0; i < result.size(); i++) {
+                                    points = new ArrayList<>();
+                                    lineOptions = new PolylineOptions();
+                                    List<HashMap<String, String>> path = result.get(i);
+                                    for (int j = 0; j < path.size(); j++) {
+                                        HashMap<String, String> point = path.get(j);
+                                        double lat = Double.parseDouble(point.get("lat"));
+                                        double lng = Double.parseDouble(point.get("lng"));
+                                        LatLng position = new LatLng(lat, lng);
+                                        points.add(position);
+                                    }
+                                    lineOptions.addAll(points);
+                                    lineOptions.width(10);
+                                    lineOptions.color(NavigationActivity.this.getColor(R.color.azul));
                                 }
-                                lineOptions.addAll(points);
-                                lineOptions.width(10);
-                                lineOptions.color(NavigationActivity.this.getColor(R.color.azul));
+                                map.addPolyline(lineOptions);
                             }
-                            map.addPolyline(lineOptions);
                             distanciaTexto.setText(distancia);
                             tiempoTexto.setText(tiempo);
                         }catch (JSONException e){
@@ -194,11 +200,14 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                         @Override
                         public void onMyLocationChange(Location arg0) {
 
-                        float distancia = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
-                        if(distancia > 10) {
 
-                            if(markerPersona != null)
-                                markerPersona.remove();
+                        if(!empezado){
+                            empezado = true;
+                            LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
+                            MarkerOptions markerCar = new MarkerOptions();
+                            markerCar.position(carLocation).title("Coche");
+                            markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
+                            map.addMarker(markerCar);
 
                             lastLatitude = arg0.getLatitude();
                             lastLongitude = arg0.getLongitude();
@@ -211,17 +220,31 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                             markerPersona = map.addMarker(markerYo);
 
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
-
-                        }
-
-                        if(!empezado){
-                            LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
-                            MarkerOptions markerCar = new MarkerOptions();
-                            markerCar.position(carLocation).title("Coche");
-                            markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
-                            map.addMarker(markerCar);
-
+                            primeraVez = true;
                             directionsVolley();
+                        }else{
+
+                            float distancia = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
+                            if(distancia > 10) {
+
+                                if(markerPersona != null)
+                                    markerPersona.remove();
+
+                                lastLatitude = arg0.getLatitude();
+                                lastLongitude = arg0.getLongitude();
+
+                                LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
+                                MarkerOptions markerYo = new MarkerOptions();
+                                markerYo.position(yoLocation).title("Yo");
+                                markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
+
+                                markerPersona = map.addMarker(markerYo);
+
+                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
+                                primeraVez = false;
+                                directionsVolley();
+
+                            }
                         }
                         }
                     });
@@ -257,6 +280,13 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                     jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
                     /** Traversing all steps */
                     for(int k=0;k<jSteps.length();k++){
+                        primeraVez = true;
+                        for(int sg=0;sg<jStepsGuardados.length();sg++){
+                            if(jSteps.get(0) == jStepsGuardados.get(i)){
+                                primeraVez = false;
+                                jStepsGuardados = jSteps;
+                            }
+                        }
                         String polyline = "";
                         polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
                         List<LatLng> list = decodePoly(polyline);
