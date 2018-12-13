@@ -188,7 +188,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
         if(!gps_enabled || !network_enabled){
 
-            Dialog.dialogoBase(NavigationActivity.this,"gpsMain",false);
+            Dialog.dialogoBase(NavigationActivity.this,"gpsMain",false,null);
 
         }else{
             try{
@@ -227,7 +227,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
                             float distancia = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
                             if(distancia < 2) {
-                                Dialog.dialogoBase(NavigationActivity.this, "encontrado", false);
+                                Dialog.dialogoBase(NavigationActivity.this, "encontrado", false,null);
                             }
                             if(distancia > 10) {
                                     if(markerPersona != null)

@@ -189,7 +189,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
 
-                if(masDetallesTexto.getText().toString().equals("Mas detalles >")){
+                if(masDetallesTexto.getText().toString().equals(getResources().getString(R.string.MasDetalles))){
                     Dialog.dialogoMasDetalles(GuardarActivity.this,"");
                 }else{
                     Dialog.dialogoMasDetalles(GuardarActivity.this,masDetallesTexto.getText().toString());
@@ -238,7 +238,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                 plaza.setText("-");
                 piso.setText("-");
                 colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.negro_view_seleccionado));
-                masDetallesTexto.setText("Mas detalles >");
+                masDetallesTexto.setText(R.string.MasDetalles);
             }
         });
         cerrarFotoLayout.setOnClickListener(new View.OnClickListener() {
@@ -274,7 +274,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                                 piso.getText().toString(),
                                 plaza.getText().toString(),
                                 selectedColor,
-                                masDetallesTexto.getText().equals("Mas detalles >") ? "" : masDetallesTexto.getText().toString(),
+                                masDetallesTexto.getText().equals(R.string.MasDetalles) ? "" : masDetallesTexto.getText().toString(),
                                 Double.toString(lastLatitude),
                                 Double.toString(lastLongitude));
 
@@ -434,7 +434,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
         if(!gps_enabled || !network_enabled){
 
-            Dialog.dialogoBase(GuardarActivity.this,"gpsGuardar",false);
+            Dialog.dialogoBase(GuardarActivity.this,"gpsGuardar",false,null);
 
         }else{
             try{

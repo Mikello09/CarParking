@@ -37,5 +37,9 @@
     <string name="subtituloEliminar">Hay un aparcamiento guardado</string>
     <string name="eliminarMensajeGuardar">Hay un aparcamiento guardado. ¿Quieres borrar el aparcamiento para guardar uno nuevo? </string>
     <string name="eliminarMensajeBuscar">Hay un aparcamiento guardado. ¿Quieres borrar el aparcamiento para buscar nuevos?</string>
+    <string name="MasDetalles">Mas detalles ></string>
+    <string name="detallesTitulo">Detalles</string>
+    <string name="detallesSubtitulo">Estos son los detalles del aparcamiento</string>
+
 
 </resources>

@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }else {
                     shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shaking);
                     guardarLayout.startAnimation(shake);
-                    Dialog.dialogoBase(MainActivity.this, "eliminarCoche" ,true);
+                    Dialog.dialogoBase(MainActivity.this, "eliminarCoche" ,true,null);
                 }
 
             }
@@ -338,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         encontradoText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog.dialogoBase(MainActivity.this, "encontrado",true);
+                Dialog.dialogoBase(MainActivity.this, "encontrado",true,null);
             }
         });
 
@@ -602,7 +602,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             getLocationMode();
         }else{
-            Dialog.dialogoBase(MainActivity.this,"gpsMain",false);
+            Dialog.dialogoBase(MainActivity.this,"gpsMain",false,null);
         }
     }
     public void getLocationMode()
@@ -684,7 +684,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         pisoDetail.setText(coche.getPiso());
         plazaDetail.setText(coche.getPlaza());
         colorDetail.setBackground(getBacgroundColor(coche.getColor()));
-        masDetallesDetail.setText(coche.getDetalles().equals("") ? "No hay detalles" : coche.getDetalles());
+        final String detalles = coche.getDetalles();
+        if(detalles.equals("")){
+            masDetallesDetail.setText("No hay detalles");
+        }else{
+            masDetallesDetail.setText(detalles);
+            masDetallesDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dialog.dialogoBase(MainActivity.this,"detalles",null,detalles);
+                }
+            });
+        }
         final Uri foto = UserConfig.getFotoPath(this);
         if(foto != null){
             imagenDetail.setImageURI(foto);

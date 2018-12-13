@@ -405,7 +405,7 @@ public class Dialog
             }
         }, 500);
     }
-    public static void dialogoMasDetalles(Context context, String texto){
+    public static void dialogoMasDetalles(final Context context, String texto){
 
         final GuardarInterface interfazDetalles = (GuardarInterface) context;
 
@@ -418,16 +418,26 @@ public class Dialog
 
         final EditText detalles = (EditText) dialog.findViewById(R.id.detallesTexto);
         TextView acpetar = (TextView)dialog.findViewById(R.id.aceptar_detalles);
+        TextView borrar = (TextView)dialog.findViewById(R.id.borrar_detalles);
 
 
         detalles.setText(texto);
         detalles.setSelection(detalles.getText().length());
 
+        borrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                interfazDetalles.ingresarMasDetalles(context.getResources().getString(R.string.MasDetalles));
+                dialog.dismiss();
+            }
+        });
+
         acpetar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(detalles.getText().toString() != "" || detalles != null)
+                if(!detalles.getText().toString().equals("") && detalles != null) {
                     interfazDetalles.ingresarMasDetalles(detalles.getText().toString());
+                }
                 dialog.dismiss();
             }
         });
@@ -435,7 +445,7 @@ public class Dialog
         dialog.show();
     }
 
-    public static void dialogoBase(final Context context, String tipo, final Boolean guardar){
+    public static void dialogoBase(final Context context, String tipo, final Boolean guardar, final String mensajeDesplegar){
 
         final android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -457,6 +467,25 @@ public class Dialog
         cerrarIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
 
         switch (tipo){
+            case "detalles":
+
+                titulo.setText(R.string.detallesTitulo);
+                subtitulo.setText(R.string.detallesSubtitulo);
+                mensaje.setText(mensajeDesplegar);
+                siBotonTexto.setText(R.string.ok);
+                imageFondo.setImageDrawable(context.getDrawable(R.drawable.details_icon_opaque));
+                siBoton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                cerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
             case "encontrado":
 
                 titulo.setText(R.string.encontradoTitulo);

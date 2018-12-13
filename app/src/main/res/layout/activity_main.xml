@@ -442,6 +442,8 @@
                             android:id="@+id/masDetallesDetail"
                             android:layout_marginRight="5dp"
                             android:layout_marginLeft="5dp"
+                            android:maxLines="2"
+                            android:ellipsize="end"
                             android:text="No hay detalles"
                             android:textSize="16dp"
                             android:textColor="@color/texto_color"/>

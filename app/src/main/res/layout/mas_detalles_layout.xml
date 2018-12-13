@@ -37,12 +37,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center|right">
+        android:gravity="center|right"
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="ACEPTAR"
+            android:textSize="18dp"
+            android:text="BORRAR"
+            android:textStyle="bold"
+            android:id="@+id/borrar_detalles"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/rojo"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="GUARDAR"
             android:textStyle="bold"
             android:id="@+id/aceptar_detalles"
             android:layout_marginRight="10dp"
