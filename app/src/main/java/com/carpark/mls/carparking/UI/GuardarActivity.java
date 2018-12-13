@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.carpark.mls.carparking.AppConfig.Navigator;
+import com.carpark.mls.carparking.AppConfig.UserConfig;
 import com.carpark.mls.carparking.AppConfig.Utils;
 import com.carpark.mls.carparking.BD.DBOperations;
 import com.carpark.mls.carparking.Interfaces.GuardarInterface;
@@ -38,8 +39,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.ByteArrayOutputStream;
 
 public class GuardarActivity extends AppCompatActivity implements OnMapReadyCallback, GuardarInterface {
 
@@ -78,6 +77,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     private Bitmap rotatedBitmap = null;
     private TextView cerrarFotoIcono;
     private LinearLayout cerrarFotoLayout;
+    private Uri fotoPath = null;
 
     //ANIMATIONS
     private Animation fadein;
@@ -209,7 +209,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
 
-                Dialog.dialogoFoto(GuardarActivity.this, rotatedBitmap);
+                Dialog.dialogoFoto(GuardarActivity.this, rotatedBitmap,null);
 
             }
         });
@@ -249,6 +249,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                 fotoLayoutDetalles.setVisibility(View.GONE);
                 fotoLayoutImagen.setVisibility(View.VISIBLE);
                 cerrarFotoLayout.setVisibility(View.GONE);
+                fotoPath = null;
             }
         });
         cerrarMapaLayout.setOnClickListener(new View.OnClickListener() {
@@ -267,12 +268,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
         Dialog.esperaDialog(GuardarActivity.this);
 
-        byte[] imageToDB = null;
-        if(rotatedBitmap != null) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
-            imageToDB = baos.toByteArray();
-        }
+        UserConfig.saveSharedPreferencesFoto(this,fotoPath);
 
         DBOperations.addCoche(GuardarActivity.this,
                                 piso.getText().toString(),
@@ -382,6 +378,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                     fotoLayoutDetalles.setVisibility(View.VISIBLE);
                     fotoLayoutDetalles.startAnimation(fadein);
                     cerrarFotoLayout.setVisibility(View.VISIBLE);
+                    fotoPath = imageUri;
 
                 } catch (Exception e) {
 

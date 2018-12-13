@@ -2,6 +2,7 @@ package com.carpark.mls.carparking.AppConfig;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 import com.carpark.mls.carparking.UI.MainActivity;
 
@@ -35,6 +36,27 @@ public class UserConfig {
     public static UserConfig getSharedPreferences(Context context){
         SharedPreferences preferences = context.getSharedPreferences("UserConfig", Context.MODE_PRIVATE);
         return new UserConfig(preferences.getString("modo","lista"),preferences.getString("orden","distancia"),preferences.getString("radio","2000"));
+    }
+
+    public static void saveSharedPreferencesFoto(Context context, Uri fotoPaht){
+        SharedPreferences preferences = context.getSharedPreferences("UserConfig", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        if(fotoPaht != null) {
+            editor.putString("fotoPath", fotoPaht.toString());
+        }else{
+            editor.putString("fotoPath", "");
+        }
+        editor.commit();
+    }
+
+    public static Uri getFotoPath(Context context){
+        SharedPreferences preferences = context.getSharedPreferences("UserConfig", Context.MODE_PRIVATE);
+        String fotoPath = preferences.getString("fotoPath","");
+        if(fotoPath != "") {
+            return Uri.parse(fotoPath);
+        }else{
+            return null;
+        }
     }
 
     public String getModo() {

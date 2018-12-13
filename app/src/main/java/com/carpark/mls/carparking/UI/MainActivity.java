@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -684,7 +685,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         plazaDetail.setText(coche.getPlaza());
         colorDetail.setBackground(getBacgroundColor(coche.getColor()));
         masDetallesDetail.setText(coche.getDetalles().equals("") ? "No hay detalles" : coche.getDetalles());
-
+        final Uri foto = UserConfig.getFotoPath(this);
+        if(foto != null){
+            imagenDetail.setImageURI(foto);
+            imagenDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dialog.dialogoFoto(MainActivity.this, null, foto);
+                }
+            });
+        }else{
+            imagenDetail.setImageDrawable(getResources().getDrawable(R.mipmap.coche_icon));
+            imagenDetail.setOnClickListener(null);
+        }
 
 
     }

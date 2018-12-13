@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
@@ -312,9 +313,9 @@ public class Dialog
         dialog.show();
 
     }
-    public static void dialogoFoto(Context context, Bitmap foto){
+    public static void dialogoFoto(final Context context, Bitmap foto, Uri uri){
 
-        final GuardarInterface interfazFoto = (GuardarInterface) context;
+
 
         final android.app.Dialog dialog = new android.app.Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -324,13 +325,30 @@ public class Dialog
 
         ImageView fotoImage = (ImageView)dialog.findViewById(R.id.fotoDialog);
         TextView cambiarFotoLayout = (TextView) dialog.findViewById(R.id.cambiarFotoTexto);
+        LinearLayout cerrarImagenLayout = (LinearLayout)dialog.findViewById(R.id.cerrarImagenLayout);
+        TextView cerrarImagenIcono = (TextView)dialog.findViewById(R.id.cerrarImagenIcono);
 
-        fotoImage.setImageBitmap(foto);
+        cerrarImagenIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
+
+        if(foto != null){
+            fotoImage.setImageBitmap(foto);
+        }else{
+            cambiarFotoLayout.setVisibility(View.GONE);
+            fotoImage.setImageURI(uri);
+        }
+
+        cerrarImagenLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         cambiarFotoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                GuardarInterface interfazFoto = (GuardarInterface) context;
                 interfazFoto.cambiarFoto();
                 dialog.dismiss();
             }
