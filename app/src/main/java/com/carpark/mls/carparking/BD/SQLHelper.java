@@ -17,7 +17,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String TABlE_NAME = "Coche";
 
-    private static final String DATABASE_CREATE = "create table if not exists Coche (id integer primary key autoincrement, piso TEXT, plaza TEXT, color TEXT, detalle TEXT, foto BLOB, latitud TEXT, longitud TEXT); ";
+    private static final String DATABASE_CREATE = "create table if not exists Coche (id integer primary key autoincrement, piso TEXT, plaza TEXT, color TEXT, detalle TEXT, latitud TEXT, longitud TEXT); ";
 
     public SQLHelper(Context contexto) {
         super(contexto, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,9 +37,9 @@ public class SQLHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
-    public void insertCoche(SQLiteDatabase db, String piso, String plaza, String color, String detalle, byte[] foto, String latitud, String longitud){
+    public void insertCoche(SQLiteDatabase db, String piso, String plaza, String color, String detalle, String latitud, String longitud){
 
-        String sentence = "INSERT INTO " + TABlE_NAME + "(piso, plaza, color, detalle, foto, latitud, longitud) Values ('" + piso + "','" + plaza + "','" + color + "','" + detalle + "','" + foto + "','" + latitud + "','" + longitud + "')";
+        String sentence = "INSERT INTO " + TABlE_NAME + "(piso, plaza, color, detalle, latitud, longitud) Values ('" + piso + "','" + plaza + "','" + color + "','" + detalle + "','" + latitud + "','" + longitud + "')";
         db.execSQL(sentence);
 
     }
@@ -54,9 +54,8 @@ public class SQLHelper extends SQLiteOpenHelper {
                 coche.setPlaza(c.getString(2));
                 coche.setColor(c.getString(3));
                 coche.setDetalles(c.getString(4));
-                coche.setFoto(c.getBlob(5));
-                coche.setLatitud(c.getString(6));
-                coche.setLongitud(c.getString(7));
+                coche.setLatitud(c.getString(5));
+                coche.setLongitud(c.getString(6));
                 listaRetornable.add(coche);
             } while(c.moveToNext());
         }

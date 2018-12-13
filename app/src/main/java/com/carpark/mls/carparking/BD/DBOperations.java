@@ -9,13 +9,13 @@ import java.util.List;
 
 public class DBOperations {
 
-    public static void addCoche(Context context, String piso, String plaza, String color, String detalles, byte[] foto, String latitud, String longitud){
+    public static void addCoche(Context context, String piso, String plaza, String color, String detalles, String latitud, String longitud){
 
         SQLHelper dbHelper = new SQLHelper(context);
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
 
-        dbHelper.insertCoche(database,piso,plaza,color,detalles,foto,latitud,longitud);
+        dbHelper.insertCoche(database,piso,plaza,color,detalles,latitud,longitud);
         database.close();
 
     }

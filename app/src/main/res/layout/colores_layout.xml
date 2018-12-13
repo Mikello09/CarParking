@@ -287,7 +287,31 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.2"></LinearLayout>
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:id="@+id/color_naranja">
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/naranja_borde"
+                android:background="@drawable/borde_circulo"
+                android:gravity="center">
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/color_naranja_circulo"
+                    android:background="@drawable/naranja_view"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/check_icono"
+                        android:textColor="@color/blanco"
+                        android:id="@+id/check_naranja"
+                        android:textSize="17dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

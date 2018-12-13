@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         plazaDetail = (TextView)findViewById(R.id.plazaDetail);
         colorDetail = (LinearLayout)findViewById(R.id.colorDetail);
         masDetallesDetail = (TextView)findViewById(R.id.masDetallesDetail);
-        //imagenDetail = (ImageView)findViewById(R.id.imagenDetail);
+        imagenDetail = (ImageView)findViewById(R.id.imagenDetail);
         opcionesIcono = (TextView)findViewById(R.id.opcionesIcono);
         opcionesLayout = (LinearLayout)findViewById(R.id.opcionesLayout);
         mapaLayout = (LinearLayout)findViewById(R.id.mapaDetallesLayout);
@@ -684,18 +684,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         plazaDetail.setText(coche.getPlaza());
         colorDetail.setBackground(getBacgroundColor(coche.getColor()));
         masDetallesDetail.setText(coche.getDetalles().equals("") ? "No hay detalles" : coche.getDetalles());
-        /*if(coche.getFoto().equals(null)){
-            imagenDetail.setBackgroundResource(R.mipmap.coche_icon);
-        }else{
 
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inDither = false;
-            options.inPurgeable = true;
-            options.inInputShareable = true;
-            options.inTempStorage = new byte[1024 *32];
-
-            imagenDetail.setImageBitmap(BitmapFactory.decodeByteArray(coche.getFoto(), 0, coche.getFoto().length,options));
-        }*/
 
 
     }
@@ -750,6 +739,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return getResources().getDrawable(R.drawable.blanco_view_seleccionado);
             case "gris":
                 return getResources().getDrawable(R.drawable.gris_view_seleccionado);
+            case "naranja":
+                return getResources().getDrawable(R.drawable.naranja_view_seleccionado);
             default:
                 return getResources().getDrawable(R.drawable.blanco_view_seleccionado);
         }

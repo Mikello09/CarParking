@@ -279,7 +279,6 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                                 plaza.getText().toString(),
                                 selectedColor,
                                 masDetallesTexto.getText().equals("Mas detalles >") ? "" : masDetallesTexto.getText().toString(),
-                                imageToDB,
                                 Double.toString(lastLatitude),
                                 Double.toString(lastLongitude));
 
@@ -528,6 +527,9 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                 break;
             case "gris":
                 colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.gris_view_seleccionado));
+                break;
+            case "naranja":
+                colorSeleccionado.setBackground(getResources().getDrawable(R.drawable.naranja_view_seleccionado));
                 break;
         }
     }

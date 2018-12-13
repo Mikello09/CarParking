@@ -6,19 +6,17 @@ public class Coche {
     private String plaza;
     private String color;
     private String detalles;
-    private byte[] foto;
     private String latitud;
     private String longitud;
 
     public Coche(){
 
     }
-    public Coche(String pi, String pl, String co, String de, byte[] fo, String lat, String lon){
+    public Coche(String pi, String pl, String co, String de, String lat, String lon){
 
         this.piso = pi;
         this.plaza = pl;
         this.color = co;
-        this.foto = fo;
         this.latitud = lat;
         this.longitud = lon;
         this.detalles = de;
@@ -44,10 +42,6 @@ public class Coche {
         this.color = color;
     }
 
-    public void setFoto(byte[] foto) {
-        this.foto = foto;
-    }
-
     public void setLatitud(String latitud) {
         this.latitud = latitud;
     }
@@ -67,9 +61,6 @@ public class Coche {
         return color;
     }
 
-    public byte[] getFoto() {
-        return foto;
-    }
 
     public String getLatitud() {
         return latitud;

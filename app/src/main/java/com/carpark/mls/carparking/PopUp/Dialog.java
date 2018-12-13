@@ -18,11 +18,12 @@ import com.carpark.mls.carparking.Interfaces.GuardarInterface;
 import com.carpark.mls.carparking.Interfaces.MainInterface;
 import com.carpark.mls.carparking.Interfaces.NavigationInterface;
 import com.carpark.mls.carparking.R;
+import com.google.android.gms.vision.text.Line;
 
 public class Dialog
 {
 
-    public static String[] colores = {"negro","azul","rojo","verde","amarillo","morado","marron","blanco","gris"};
+    public static String[] colores = {"negro","azul","rojo","verde","amarillo","morado","marron","blanco","gris","naranja"};
     public static String colorSeleccionado = "";
 
 
@@ -187,6 +188,7 @@ public class Dialog
         LinearLayout layoutMarron = (LinearLayout)dialog.findViewById(R.id.color_marron);
         LinearLayout layoutBlanco = (LinearLayout)dialog.findViewById(R.id.color_blanco);
         LinearLayout layoutGris = (LinearLayout)dialog.findViewById(R.id.color_gris);
+        LinearLayout layoutNaranja = (LinearLayout)dialog.findViewById(R.id.color_naranja);
 
         LinearLayout bordeNegro = (LinearLayout)dialog.findViewById(R.id.negro_borde);
         LinearLayout bordeAzul = (LinearLayout)dialog.findViewById(R.id.azul_borde);
@@ -197,6 +199,7 @@ public class Dialog
         LinearLayout bordeMarron = (LinearLayout)dialog.findViewById(R.id.marron_borde);
         LinearLayout bordeBlanco = (LinearLayout)dialog.findViewById(R.id.blanco_borde);
         LinearLayout bordeGris = (LinearLayout)dialog.findViewById(R.id.gris_borde);
+        LinearLayout bordeNaranja = (LinearLayout)dialog.findViewById(R.id.naranja_borde);
 
         TextView checkNegro = (TextView)dialog.findViewById(R.id.check_negro);
         TextView checkAzul = (TextView)dialog.findViewById(R.id.check_azul);
@@ -207,9 +210,10 @@ public class Dialog
         TextView checkMarron = (TextView)dialog.findViewById(R.id.check_marron);
         TextView checkBlanco = (TextView)dialog.findViewById(R.id.check_blanco);
         TextView checkGris = (TextView)dialog.findViewById(R.id.check_gris);
+        TextView checkNaranja = (TextView)dialog.findViewById(R.id.check_naranja);
 
-        final LinearLayout[] bordes = {bordeNegro,bordeAzul,bordeRojo,bordeVerde,bordeAmarillo,bordeMorado,bordeMarron,bordeBlanco,bordeGris};
-        final TextView[] checks = {checkNegro,checkAzul,checkRojo,checkVerde,checkAmarillo,checkMorado,checkMarron,checkBlanco,checkGris};
+        final LinearLayout[] bordes = {bordeNegro,bordeAzul,bordeRojo,bordeVerde,bordeAmarillo,bordeMorado,bordeMarron,bordeBlanco,bordeGris,bordeNaranja};
+        final TextView[] checks = {checkNegro,checkAzul,checkRojo,checkVerde,checkAmarillo,checkMorado,checkMarron,checkBlanco,checkGris,checkNaranja};
 
         checkNegro.setTypeface(Utils.setFont(context,"fontawesome",true));
         checkAzul.setTypeface(Utils.setFont(context,"fontawesome",true));
@@ -220,6 +224,7 @@ public class Dialog
         checkMarron.setTypeface(Utils.setFont(context,"fontawesome",true));
         checkBlanco.setTypeface(Utils.setFont(context,"fontawesome",true));
         checkGris.setTypeface(Utils.setFont(context,"fontawesome",true));
+        checkNaranja.setTypeface(Utils.setFont(context, "fontawesome", true));
 
         colorSeleccionado = seleccionar(context,bordes,checks,color);
 
@@ -291,6 +296,14 @@ public class Dialog
             @Override
             public void onClick(View v) {
                 colorSeleccionado = seleccionar(context,bordes,checks,"gris");
+                interfazColor.seleccionarColor(colorSeleccionado);
+                cerrarDialogoColores(dialog);
+            }
+        });
+        layoutNaranja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorSeleccionado = seleccionar(context,bordes,checks,"naranja");
                 interfazColor.seleccionarColor(colorSeleccionado);
                 cerrarDialogoColores(dialog);
             }
