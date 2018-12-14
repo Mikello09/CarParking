@@ -229,6 +229,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                             if(distancia < 2) {
                                 Dialog.dialogoBase(NavigationActivity.this, "encontrado", false,null);
                             }
+                            lastLatitude = arg0.getLatitude();
+                            lastLongitude = arg0.getLongitude();
                             if(distancia > 10) {
                                     if(markerPersona != null)
                                         markerPersona.remove();

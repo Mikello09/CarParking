@@ -232,6 +232,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 if(checkedId == R.id.cercanosRadioButton){
+                    radio = UserConfig.getSharedPreferences(MainActivity.this).getRadio();
+                    if(radio.equals("10000")){
+                        seekbar.setProgress(10);
+                    }else{
+                        seekbar.setProgress(Character.getNumericValue(radio.charAt(0)) - 1);
+                    }
                     radioLayout.setVisibility(View.VISIBLE);
                 }else{
                     radioLayout.setVisibility(View.GONE);
