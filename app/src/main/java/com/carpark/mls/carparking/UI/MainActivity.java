@@ -54,6 +54,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.vision.text.Line;
 
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //ANIMATIONS
     private Animation fadein;
+    private Animation fadeout;
     private Animation shake;
 
     //INFO
@@ -152,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onBind(){
 
         fadein = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        fadeout = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
 
         mainFrame = (FrameLayout)findViewById(R.id.mainFrame);
         aparcarIcono = (TextView)findViewById(R.id.guardarCocheIcono);
@@ -289,6 +292,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     // Scrolling up
                     mapaChooseLayout.setVisibility(View.GONE);
                     listaChooseLayout.setVisibility(View.GONE);
+                    mapaChooseLayout.startAnimation(fadeout);
+                    listaChooseLayout.startAnimation(fadeout);
                     scrolling = "up";
                 } else {
                     // Scrolling down
@@ -806,6 +811,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             map.setMyLocationEnabled(true);
 
             if (map != null) {
+
+                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+                        opcionesLayout.setVisibility(View.VISIBLE);
+                        mapaChooseLayout.setVisibility(View.VISIBLE);
+                        listaChooseLayout.setVisibility(View.VISIBLE);
+                        opcionesLayout.startAnimation(fadein);
+                        mapaChooseLayout.startAnimation(fadein);
+                        listaChooseLayout.startAnimation(fadein);
+                    }
+                });
+
+                map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        opcionesLayout.setVisibility(View.GONE);
+                        mapaChooseLayout.setVisibility(View.GONE);
+                        listaChooseLayout.setVisibility(View.GONE);
+                        opcionesLayout.startAnimation(fadeout);
+                        mapaChooseLayout.startAnimation(fadeout);
+                        listaChooseLayout.startAnimation(fadeout);
+                        return false;
+                    }
+                });
 
 
                 map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
