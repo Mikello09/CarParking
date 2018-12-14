@@ -419,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                errorLayout("Error en volley: " + error.getMessage(),"other");
+                errorLayout("Error de red","other");
             }
         });
 
@@ -448,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                errorLayout("Error en volley: " + error.getMessage(),"other");
+                errorLayout("Error de red","other");
             }
         });
 
