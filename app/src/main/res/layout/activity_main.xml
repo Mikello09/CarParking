@@ -25,18 +25,46 @@
         android:id="@+id/titulo_layout"
         android:orientation="horizontal"
         android:gravity="center">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/coche_icon"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="APPARCA"
-            android:id="@+id/titulo_text"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:textColor="@color/blanco"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@mipmap/coche_icon"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="APPARCA"
+                        android:id="@+id/titulo_text"
+                        android:textSize="30dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/blanco"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:id="@+id/infoLayout"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_text"
+                    android:textColor="@color/blanco"
+                    android:textSize="18dp"
+                    android:id="@+id/infoIcono"
+                    android:text="@string/infoIcono"/>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

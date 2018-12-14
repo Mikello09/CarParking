@@ -131,6 +131,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Animation fadein;
     private Animation shake;
 
+    //INFO
+    private LinearLayout infoLayout;
+    private TextView infoIcono;
+
 
 
     private final String placesAPI = "AIzaSyDYExxjo__oIjI9cqwFkQt-2oq-kBfSdp8";
@@ -191,6 +195,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         seekbarValue = (TextView)findViewById(R.id.seekbarValue);
         guardarOpciones = (TextView)findViewById(R.id.guardarOpciones);
         radioLayout = (LinearLayout)findViewById(R.id.radioLayout);
+        infoLayout = (LinearLayout)findViewById(R.id.infoLayout);
+        infoIcono = (TextView)findViewById(R.id.infoIcono);
 
 
         aparcarIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
@@ -202,12 +208,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapaIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         listaIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         cerrarOpcionesIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
+        infoIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
 
         listeners();
 
     }
     public void listeners(){
 
+
+        infoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iInfo = new Intent(MainActivity.this,InfoActivity.class);
+                startActivity(iInfo);
+            }
+        });
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
