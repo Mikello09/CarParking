@@ -573,7 +573,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
                 android:gravity="center"
-                android:background="@drawable/main_rectangle_view"
+                android:background="@drawable/ripple_effect_blue"
                 android:id="@+id/dondeEstaLayout"
                 android:orientation="vertical">
                 <TextView
@@ -605,7 +605,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:gravity="center"
-                android:background="@drawable/main_rectangle_view"
+                android:background="@drawable/ripple_effect_blue"
                 android:id="@+id/guardarCocheLayout"
                 android:orientation="vertical">
                 <TextView
