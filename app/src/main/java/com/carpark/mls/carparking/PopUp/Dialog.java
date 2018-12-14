@@ -486,6 +486,8 @@ public class Dialog
                         dialog.dismiss();
                     }
                 });
+
+                break;
             case "encontrado":
 
                 titulo.setText(R.string.encontradoTitulo);

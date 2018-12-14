@@ -39,7 +39,7 @@
     <string name="eliminarMensajeBuscar">Hay un aparcamiento guardado. ¿Quieres borrar el aparcamiento para buscar nuevos?</string>
     <string name="MasDetalles">Mas detalles ></string>
     <string name="detallesTitulo">Detalles</string>
-    <string name="detallesSubtitulo">Estos son los detalles del aparcamiento</string>
+    <string name="detallesSubtitulo">Detalles del aparcamiento</string>
 
 
 </resources>
