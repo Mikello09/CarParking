@@ -200,6 +200,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/close_opciones_icon"
                         android:text="@string/cerrarIcono"
+                        android:background="@drawable/ripple_text"
                         android:textColor="@color/rojo"
                         android:textSize="20dp"/>
                 </LinearLayout>
@@ -294,6 +295,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:text="GUARDAR"
+                    android:background="@drawable/ripple_text"
                     android:id="@+id/guardarOpciones"
                     android:textColor="@color/verde"
                     android:textStyle="bold"
@@ -474,6 +476,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ENCONTRADO"
+                        android:background="@drawable/ripple_text"
                         android:textColor="@color/verde"
                         android:layout_margin="5dp"
                         android:textStyle="bold"
@@ -548,6 +551,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:text="REINTENTAR"
+                    android:background="@drawable/ripple_text"
                     android:id="@+id/reintentarTexto"
                     android:textSize="18dp"
                     android:textStyle="bold"

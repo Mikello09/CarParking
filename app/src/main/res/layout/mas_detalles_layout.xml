@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:textSize="18dp"
             android:text="GUARDAR"
+            android:background="@drawable/ripple_text"
             android:textStyle="bold"
             android:id="@+id/aceptar_detalles"
             android:layout_marginRight="10dp"

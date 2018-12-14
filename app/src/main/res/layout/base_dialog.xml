@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:text="@string/cerrarIcono"
             android:textSize="25dp"
+            android:background="@drawable/ripple_text"
             android:textColor="@color/rojo"
             android:id="@+id/cerrarDialogo"/>
     </LinearLayout>
@@ -119,6 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/rojo"
+                        android:background="@drawable/ripple_text"
                         android:textStyle="bold"
                         android:textSize="18dp"
                         android:id="@+id/cancelarDialogoTexto"/>
@@ -133,6 +135,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/verde"
+                        android:background="@drawable/ripple_text"
                         android:textStyle="bold"
                         android:textSize="18dp"
                         android:id="@+id/okDialogoTexto"/>

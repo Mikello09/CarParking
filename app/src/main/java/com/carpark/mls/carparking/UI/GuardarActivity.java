@@ -274,7 +274,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                                 piso.getText().toString(),
                                 plaza.getText().toString(),
                                 selectedColor,
-                                masDetallesTexto.getText().equals(R.string.MasDetalles) ? "" : masDetallesTexto.getText().toString(),
+                                masDetallesTexto.getText().equals(getResources().getString(R.string.MasDetalles)) ? "" : masDetallesTexto.getText().toString(),
                                 Double.toString(lastLatitude),
                                 Double.toString(lastLongitude));
 
