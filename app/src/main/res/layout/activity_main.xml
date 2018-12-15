@@ -500,16 +500,29 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"
                         android:gravity="right|bottom">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="ENCONTRADO"
-                        android:background="@drawable/ripple_text"
-                        android:textColor="@color/verde"
-                        android:layout_margin="5dp"
-                        android:textStyle="bold"
-                        android:textSize="18dp"
-                        android:id="@+id/encontradoText"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="20dp"
+                            android:id="@+id/encontradoText"
+                            android:background="@drawable/ripple_effect_encontrado"
+                            android:gravity="center"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/encontradoIcono"
+                                android:textSize="18dp"
+                                android:text="@string/encontradoIcono"
+                                android:textColor="@color/blanco"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Encontrado"
+                                android:textColor="@color/blanco"
+                                android:textStyle="bold"
+                                android:textSize="14dp" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

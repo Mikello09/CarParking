@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageView imagenFondo;
 
     //DETAIL LAYOUT
-    private TextView encontradoText;
+    private LinearLayout encontradoLayout;
+    private TextView encontradoIcono;
     private LinearLayout detailLayout;
     private TextView pisoDetail;
     private TextView plazaDetail;
@@ -174,7 +175,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         alertIcono = (TextView)findViewById(R.id.warningIcono);
         errorText = (TextView)findViewById(R.id.errorTexto);
         reintentar = (TextView)findViewById(R.id.reintentarTexto);
-        encontradoText = (TextView)findViewById(R.id.encontradoText);
+        encontradoLayout = (LinearLayout) findViewById(R.id.encontradoText);
+        encontradoIcono = (TextView)findViewById(R.id.encontradoIcono);
         pisoDetail = (TextView)findViewById(R.id.pisoDetail);
         plazaDetail = (TextView)findViewById(R.id.plazaDetail);
         colorDetail = (LinearLayout)findViewById(R.id.colorDetail);
@@ -215,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         listaIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         cerrarOpcionesIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
         infoIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
+        encontradoIcono.setTypeface(Utils.setFont(MainActivity.this,"fontawesome",true));
 
         listeners();
 
@@ -364,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        encontradoText.setOnClickListener(new View.OnClickListener() {
+        encontradoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Dialog.dialogoBase(MainActivity.this, "encontrado",true,null);
