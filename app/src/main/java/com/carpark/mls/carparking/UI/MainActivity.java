@@ -5,12 +5,15 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -724,13 +727,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         final Uri foto = UserConfig.getFotoPath(this);
         if(foto != null){
-            imagenDetail.setImageURI(foto);
-            imagenDetail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Dialog.dialogoFoto(MainActivity.this, null, foto);
-                }
-            });
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), foto);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                final Bitmap bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+                imagenDetail.setImageBitmap(bmp);
+                imagenDetail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Dialog.dialogoFoto(MainActivity.this, bmp);
+                    }
+                });
+            }catch (Exception e){
+
+            }
         }else{
             imagenDetail.setImageDrawable(getResources().getDrawable(R.mipmap.coche_icon));
             imagenDetail.setOnClickListener(null);

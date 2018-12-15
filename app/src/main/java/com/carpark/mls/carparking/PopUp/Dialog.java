@@ -313,7 +313,7 @@ public class Dialog
         dialog.show();
 
     }
-    public static void dialogoFoto(final Context context, Bitmap foto, Uri uri){
+    public static void dialogoFoto(final Context context, Bitmap foto){
 
 
 
@@ -330,12 +330,7 @@ public class Dialog
 
         cerrarImagenIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
 
-        if(foto != null){
-            fotoImage.setImageBitmap(foto);
-        }else{
-            cambiarFotoLayout.setVisibility(View.GONE);
-            fotoImage.setImageURI(uri);
-        }
+        fotoImage.setImageBitmap(foto);
 
         cerrarImagenLayout.setOnClickListener(new View.OnClickListener() {
             @Override

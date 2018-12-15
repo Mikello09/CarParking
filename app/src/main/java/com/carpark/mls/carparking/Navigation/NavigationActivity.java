@@ -202,55 +202,51 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                         @Override
                         public void onMyLocationChange(Location arg0) {
 
-                        if(!empezado){
-                            empezado = true;
-                            LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
-                            MarkerOptions markerCar = new MarkerOptions();
-                            markerCar.position(carLocation).title("Coche");
-                            markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
-                            map.addMarker(markerCar);
+                            if(!empezado){
+                                empezado = true;
+                                LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
+                                MarkerOptions markerCar = new MarkerOptions();
+                                markerCar.position(carLocation).title("Coche");
+                                markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
+                                map.addMarker(markerCar);
 
-                            lastLatitude = arg0.getLatitude();
-                            lastLongitude = arg0.getLongitude();
 
-                            LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
-                            MarkerOptions markerYo = new MarkerOptions();
-                            markerYo.position(yoLocation).title("Yo");
-                            markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
+                                LatLng yoLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
+                                MarkerOptions markerYo = new MarkerOptions();
+                                markerYo.position(yoLocation).title("Yo");
+                                markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
 
-                            markerPersona = map.addMarker(markerYo);
+                                markerPersona = map.addMarker(markerYo);
 
-                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
-                            primeraVez = true;
-                            directionsVolley();
-                        }else{
+                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
+                                primeraVez = true;
+                                directionsVolley();
+                            }else{
 
-                            float distancia = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
-                            if(distancia < 2) {
-                                Dialog.dialogoBase(NavigationActivity.this, "encontrado", false,null);
+                                float distanciaCoche = calcularDistancia(lastLatitude,lastLongitude,destinationLatitude,destinationLongitude);
+                                float distanciaPersona = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
+                                if(distanciaCoche < 2) {
+                                    Dialog.dialogoBase(NavigationActivity.this, "encontrado", false,null);
+                                }
+                                if(distanciaPersona > 5) {
+                                        if(markerPersona != null)
+                                            markerPersona.remove();
+
+                                        LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
+                                        MarkerOptions markerYo = new MarkerOptions();
+                                        markerYo.position(yoLocation).title("Yo");
+                                        markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
+
+                                        markerPersona = map.addMarker(markerYo);
+
+                                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
+                                        primeraVez = false;
+                                        directionsVolley();
+                                }
+
                             }
                             lastLatitude = arg0.getLatitude();
                             lastLongitude = arg0.getLongitude();
-                            if(distancia > 10) {
-                                    if(markerPersona != null)
-                                        markerPersona.remove();
-
-                                    lastLatitude = arg0.getLatitude();
-                                    lastLongitude = arg0.getLongitude();
-
-                                    LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
-                                    MarkerOptions markerYo = new MarkerOptions();
-                                    markerYo.position(yoLocation).title("Yo");
-                                    markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
-
-                                    markerPersona = map.addMarker(markerYo);
-
-                                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
-                                    primeraVez = false;
-                                    directionsVolley();
-                            }
-
-                        }
                         }
                     });
                 }

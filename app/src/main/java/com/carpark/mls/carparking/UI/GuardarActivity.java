@@ -209,7 +209,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
 
-                Dialog.dialogoFoto(GuardarActivity.this, rotatedBitmap,null);
+                Dialog.dialogoFoto(GuardarActivity.this, rotatedBitmap);
 
             }
         });
