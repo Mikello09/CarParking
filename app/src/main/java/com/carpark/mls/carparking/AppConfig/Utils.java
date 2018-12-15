@@ -41,10 +41,14 @@ public class Utils {
         }
     }
 
-    public static void showSnack(FrameLayout layout, String mensaje){
-        Snackbar snackbar = Snackbar.make(layout, mensaje, Snackbar.LENGTH_LONG);
-        snackbar.show();
-
+    public static void showSnack(FrameLayout frame, LinearLayout linear, String mensaje){
+        if(frame == null){
+            Snackbar snackbar = Snackbar.make(linear, mensaje, Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+        else{
+            Snackbar snackbar = Snackbar.make(frame, mensaje, Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
-
 }

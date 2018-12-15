@@ -348,12 +348,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }else{
                         shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shaking);
                         buscarLayout.startAnimation(shake);
-                        Utils.showSnack(mainFrame,"No hay ubicación guardada");
+                        Utils.showSnack(mainFrame,null,"No hay ubicación guardada");
                     }
                 }else{
                     shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shaking);
                     buscarLayout.startAnimation(shake);
-                    Utils.showSnack(mainFrame,"No hay ningún coche guardado");
+                    Utils.showSnack(mainFrame,null,"No hay ningún coche guardado");
                 }
 
 
@@ -574,6 +574,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (eliminar){
             DBOperations.eliminarCoches(MainActivity.this);
             if(guardar) {
+                dialogo.dismiss();
                 Navigator.NavigateToGuardar(MainActivity.this);
             }else{
                 dialogo.dismiss();

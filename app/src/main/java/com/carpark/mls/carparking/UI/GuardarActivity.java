@@ -43,6 +43,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class GuardarActivity extends AppCompatActivity implements OnMapReadyCallback, GuardarInterface {
 
 
+
+    //CAMPOS GLOBALES
+    private boolean detallesVacios = true;
+    private boolean fotoVacia = true;
+    private boolean mapaVacio = true;
+    private LinearLayout guardarActividad;
+
     //MAPA VARS
     private LocationManager mLocationManager;
     private final long LOCATION_REFRESH_TIME = 1;
@@ -125,6 +132,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         cerrarMapaIcono = (TextView)findViewById(R.id.cerrrarMapaIcono);
         cerrarMapaLayout = (LinearLayout)findViewById(R.id.cerrarMapa);
         fotoLayoutImagen = (LinearLayout)findViewById(R.id.fotoLayoutImagen);
+        guardarActividad = (LinearLayout)findViewById(R.id.guardarActividad);
 
 
         cerrarDetallesIcono.setTypeface(Utils.setFont(GuardarActivity.this,"fontawesome",true));
@@ -142,6 +150,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
     public void configureMapa(){
 
+        mapaVacio = false;
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapa);
         mapFragment.getMapAsync(this);
@@ -177,6 +186,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
 
+                detallesVacios = false;
                 anadirDetallasImagen.setVisibility(View.GONE);
                 anadirDetallesTexto.setVisibility(View.VISIBLE);
                 anadirDetallesTexto.startAnimation(fadein);
@@ -232,6 +242,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         cerrarDetallesLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                detallesVacios = true;
                 anadirDetallesTexto.setVisibility(View.GONE);
                 anadirDetallasImagen.setVisibility(View.VISIBLE);
                 cerrarDetallesLayout.setVisibility(View.GONE);
@@ -244,6 +255,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         cerrarFotoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fotoVacia = true;
                 rotatedBitmap = null;
                 foto.setImageBitmap(rotatedBitmap);
                 fotoLayoutDetalles.setVisibility(View.GONE);
@@ -255,6 +267,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
         cerrarMapaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mapaVacio = true;
                 mapaDetalles.setVisibility(View.GONE);
                 mapaImagen.setVisibility(View.VISIBLE);
                 map.clear();
@@ -266,22 +279,35 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
     }
     public void guardar(){
 
-        Dialog.esperaDialog(GuardarActivity.this);
 
-        UserConfig.saveSharedPreferencesFoto(this,fotoPath);
+        if(!camposVacios()) {
 
-        DBOperations.addCoche(GuardarActivity.this,
-                                piso.getText().toString(),
-                                plaza.getText().toString(),
-                                selectedColor,
-                                masDetallesTexto.getText().equals(getResources().getString(R.string.MasDetalles)) ? "" : masDetallesTexto.getText().toString(),
-                                Double.toString(lastLatitude),
-                                Double.toString(lastLongitude));
+            Dialog.esperaDialog(GuardarActivity.this);
+            UserConfig.saveSharedPreferencesFoto(this, fotoPath);
 
+            DBOperations.addCoche(GuardarActivity.this,
+                    piso.getText().toString(),
+                    plaza.getText().toString(),
+                    selectedColor,
+                    masDetallesTexto.getText().equals(getResources().getString(R.string.MasDetalles)) ? "" : masDetallesTexto.getText().toString(),
+                    Double.toString(lastLatitude),
+                    Double.toString(lastLongitude));
+        }else{
 
-
+            Utils.showSnack(null, guardarActividad,"No hay datos para guardar");
+        }
 
     }
+
+    private boolean camposVacios(){
+
+        if(detallesVacios && fotoVacia && mapaVacio){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     private void sacarFoto(){
 
         ContentValues values = new ContentValues();
@@ -347,6 +373,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
 
                 try {
 
+                    fotoVacia = false;
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
 
                     ExifInterface ei = new ExifInterface(getRealPathFromURI(imageUri));

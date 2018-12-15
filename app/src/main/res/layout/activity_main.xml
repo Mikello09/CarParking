@@ -519,7 +519,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/encontradoIcono"
-                                android:textSize="18dp"
+                                android:textSize="20dp"
                                 android:text="@string/encontradoIcono"
                                 android:textColor="@color/blanco"/>
                             <TextView
