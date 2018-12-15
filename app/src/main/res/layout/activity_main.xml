@@ -106,16 +106,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:visibility="gone"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginLeft="7dp"
-                        android:layout_marginRight="7dp"
-                        android:layout_marginBottom="7dp"
                         android:id="@+id/mapaDetallesLayout">
-                        <fragment
+                        <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:name="com.google.android.gms.maps.SupportMapFragment"
-                            android:id="@+id/mapaDetalles"/>
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="12dp">
+                            <fragment
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:name="com.google.android.gms.maps.SupportMapFragment"
+                                android:id="@+id/mapaDetalles"/>
+                        </android.support.v7.widget.CardView>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="wrap_content"
