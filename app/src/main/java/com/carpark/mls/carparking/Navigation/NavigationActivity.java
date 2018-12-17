@@ -56,6 +56,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     private TextView tiempoTexto;
     private TextView tiempoIcono;
 
+    private boolean encontrado = false;
+
     private GoogleMap map;
     private LocationManager mLocationManager;
     private String directionsApiKey = "AIzaSyDYExxjo__oIjI9cqwFkQt-2oq-kBfSdp8";
@@ -149,10 +151,15 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                                     lineOptions.width(10);
                                     lineOptions.color(NavigationActivity.this.getColor(R.color.azul));
                                 }
-                                map.addPolyline(lineOptions);
+                                if(lineOptions == null){
+                                    mostrarEncontradoLayout();
+                                }else{
+                                    map.addPolyline(lineOptions);
+                                    distanciaTexto.setText(distancia);
+                                    tiempoTexto.setText(tiempo);
+                                }
                             }
-                            distanciaTexto.setText(distancia);
-                            tiempoTexto.setText(tiempo);
+
                         }catch (JSONException e){
                             Utils.showToast(NavigationActivity.this,"JSON ERROR: " + e.getMessage());
                         }
@@ -225,8 +232,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
                                 float distanciaCoche = calcularDistancia(lastLatitude,lastLongitude,destinationLatitude,destinationLongitude);
                                 float distanciaPersona = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
-                                if(distanciaCoche < 2) {
-                                    Dialog.dialogoBase(NavigationActivity.this, "encontrado", false,null);
+                                if(distanciaCoche <= 3) {
+                                    mostrarEncontradoLayout();
                                 }
                                 if(distanciaPersona > 5) {
                                         if(markerPersona != null)
@@ -258,6 +265,12 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
+    public void mostrarEncontradoLayout(){
+        if(!encontrado){
+            encontrado = true;
+            Dialog.dialogoBase(NavigationActivity.this, "encontrado", false,null);
+        }
+    }
 
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
         List<List<HashMap<String, String>>> routes = new ArrayList<>() ;
@@ -365,6 +378,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
             DBOperations.eliminarCoches(NavigationActivity.this);
             Navigator.NavigateToMain(NavigationActivity.this);
         }else{
+            encontrado = false;
             dialogo.dismiss();
         }
     }
