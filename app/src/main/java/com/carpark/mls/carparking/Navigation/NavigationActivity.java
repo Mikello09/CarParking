@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
@@ -180,7 +181,6 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
 
         map = googleMap;
-        //mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
@@ -198,68 +198,12 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
             Dialog.dialogoBase(NavigationActivity.this,"gpsMain",false,null);
 
         }else{
-            try{
 
-                map.setMyLocationEnabled(true);
-
-                if (map != null) {
-
-                    map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-
-                        @Override
-                        public void onMyLocationChange(Location arg0) {
-
-                            if(!empezado){
-                                empezado = true;
-                                LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
-                                MarkerOptions markerCar = new MarkerOptions();
-                                markerCar.position(carLocation).title("Coche");
-                                markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
-                                map.addMarker(markerCar);
-
-
-                                LatLng yoLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
-                                MarkerOptions markerYo = new MarkerOptions();
-                                markerYo.position(yoLocation).title("Yo");
-                                markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
-
-                                markerPersona = map.addMarker(markerYo);
-
-                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
-                                primeraVez = true;
-                                directionsVolley();
-                            }else{
-
-                                float distanciaCoche = calcularDistancia(lastLatitude,lastLongitude,destinationLatitude,destinationLongitude);
-                                float distanciaPersona = calcularDistancia(lastLatitude,lastLongitude,arg0.getLatitude(),arg0.getLongitude());
-                                if(distanciaCoche <= 3) {
-                                    mostrarEncontradoLayout();
-                                }
-                                if(distanciaPersona > 5) {
-                                        if(markerPersona != null)
-                                            markerPersona.remove();
-
-                                        LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
-                                        MarkerOptions markerYo = new MarkerOptions();
-                                        markerYo.position(yoLocation).title("Yo");
-                                        markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
-
-                                        markerPersona = map.addMarker(markerYo);
-
-                                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
-                                        primeraVez = false;
-                                        directionsVolley();
-                                }
-
-                            }
-                            lastLatitude = arg0.getLatitude();
-                            lastLongitude = arg0.getLongitude();
-                        }
-                    });
-                }
-            }catch(SecurityException e){
-
-                //NO HAY PERMISO
+            map.setMyLocationEnabled(true);
+            if (map != null) {
+                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        4000,
+                        0, locationListenerGPS);
             }
         }
 
@@ -271,6 +215,79 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
             Dialog.dialogoBase(NavigationActivity.this, "encontrado", false,null);
         }
     }
+
+
+    LocationListener locationListenerGPS=new LocationListener() {
+        @Override
+        public void onLocationChanged(android.location.Location location) {
+            double latitude=location.getLatitude();
+            double longitude=location.getLongitude();
+            String msg="New Latitude: "+latitude + "New Longitude: "+longitude;
+
+
+            if(!empezado){
+                empezado = true;
+                LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
+                MarkerOptions markerCar = new MarkerOptions();
+                markerCar.position(carLocation).title("Coche");
+                markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
+                map.addMarker(markerCar);
+
+
+                LatLng yoLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                MarkerOptions markerYo = new MarkerOptions();
+                markerYo.position(yoLocation).title("Yo");
+                markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
+
+                markerPersona = map.addMarker(markerYo);
+
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
+                directionsVolley();
+            }else{
+
+                float distanciaCoche = calcularDistancia(lastLatitude,lastLongitude,destinationLatitude,destinationLongitude);
+                //float distanciaPersona = calcularDistancia(lastLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
+                if(distanciaCoche <= 3) {
+                    mostrarEncontradoLayout();
+                }
+
+                if(markerPersona != null)
+                    markerPersona.remove();
+
+                LatLng yoLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                MarkerOptions markerYo = new MarkerOptions();
+                markerYo.position(yoLocation).title("Yo");
+                markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
+
+                markerPersona = map.addMarker(markerYo);
+
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
+                directionsVolley();
+
+
+            }
+            lastLatitude = location.getLatitude();
+            lastLongitude = location.getLongitude();
+
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
 
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
         List<List<HashMap<String, String>>> routes = new ArrayList<>() ;
@@ -293,16 +310,21 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                 for(int j=0;j<jLegs.length();j++){
                     jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
                     /** Traversing all steps */
-                    for(int k=0;k<jSteps.length();k++){
+                    if(j == 0) {
                         primeraVez = true;
-                        if(jStepsGuardados == null)
+                        if (jStepsGuardados == null) {
                             jStepsGuardados = jSteps;
-                        for(int sg=0;sg<jStepsGuardados.length();sg++){
-                            if(jSteps.get(0) == jStepsGuardados.get(i)){
-                                primeraVez = false;
-                                jStepsGuardados = jSteps;
+                        } else {
+                            for (int sg = 0; sg < jStepsGuardados.length(); sg++) {
+                                if (jSteps.get(0) == jStepsGuardados.get(sg)) {
+                                    primeraVez = false;
+                                    jStepsGuardados = jSteps;
+                                    return null;
+                                }
                             }
                         }
+                    }
+                    for(int k=0;k<jSteps.length();k++){
                         String polyline = "";
                         polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
                         List<LatLng> list = decodePoly(polyline);
