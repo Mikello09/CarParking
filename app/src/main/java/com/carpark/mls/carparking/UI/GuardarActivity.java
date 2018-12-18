@@ -39,6 +39,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 public class GuardarActivity extends AppCompatActivity implements OnMapReadyCallback, GuardarInterface {
 
@@ -219,7 +222,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
 
-                Dialog.dialogoFoto(GuardarActivity.this, rotatedBitmap);
+                Dialog.dialogoFoto(GuardarActivity.this, imageUri);
 
             }
         });
@@ -257,7 +260,7 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             public void onClick(View v) {
                 fotoVacia = true;
                 rotatedBitmap = null;
-                foto.setImageBitmap(rotatedBitmap);
+                foto.setImageBitmap(null);
                 fotoLayoutDetalles.setVisibility(View.GONE);
                 fotoLayoutImagen.setVisibility(View.VISIBLE);
                 cerrarFotoLayout.setVisibility(View.GONE);
@@ -374,33 +377,9 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
                 try {
 
                     fotoVacia = false;
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
 
-                    ExifInterface ei = new ExifInterface(getRealPathFromURI(imageUri));
-                    int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                            ExifInterface.ORIENTATION_UNDEFINED);
+                    Picasso.with(this).load(imageUri).resize(150,foto.getHeight()).rotate(90).into(foto);
 
-
-                    switch(orientation) {
-
-                        case ExifInterface.ORIENTATION_ROTATE_90:
-                            rotatedBitmap = rotateImage(bitmap, 90);
-                            break;
-
-                        case ExifInterface.ORIENTATION_ROTATE_180:
-                            rotatedBitmap = rotateImage(bitmap, 180);
-                            break;
-
-                        case ExifInterface.ORIENTATION_ROTATE_270:
-                            rotatedBitmap = rotateImage(bitmap, 270);
-                            break;
-
-                        case ExifInterface.ORIENTATION_NORMAL:
-                        default:
-                            rotatedBitmap = bitmap;
-                    }
-
-                    foto.setImageBitmap(rotatedBitmap);
                     anadirFotoLayout.setVisibility(View.GONE);
                     fotoLayoutDetalles.setVisibility(View.VISIBLE);
                     fotoLayoutDetalles.startAnimation(fadein);
@@ -422,20 +401,6 @@ public class GuardarActivity extends AppCompatActivity implements OnMapReadyCall
             cerrarFotoLayout.setVisibility(View.GONE);
 
         }
-    }
-    public static Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
-    }
-    public String getRealPathFromURI(Uri contentUri) {
-        String[] proj = { MediaStore.Images.Media.DATA };
-        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {

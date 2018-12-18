@@ -20,6 +20,7 @@ import com.carpark.mls.carparking.Interfaces.MainInterface;
 import com.carpark.mls.carparking.Interfaces.NavigationInterface;
 import com.carpark.mls.carparking.R;
 import com.google.android.gms.vision.text.Line;
+import com.squareup.picasso.Picasso;
 
 public class Dialog
 {
@@ -313,7 +314,7 @@ public class Dialog
         dialog.show();
 
     }
-    public static void dialogoFoto(final Context context, Bitmap foto){
+    public static void dialogoFoto(final Context context, Uri foto){
 
 
 
@@ -330,7 +331,7 @@ public class Dialog
 
         cerrarImagenIcono.setTypeface(Utils.setFont(context,"fontawesome",true));
 
-        fotoImage.setImageBitmap(foto);
+        Picasso.with(context).load(foto).resize(fotoImage.getWidth(),250).rotate(90).into(fotoImage);
 
         cerrarImagenLayout.setOnClickListener(new View.OnClickListener() {
             @Override

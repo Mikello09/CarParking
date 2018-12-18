@@ -60,6 +60,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.vision.text.Line;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -731,22 +732,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         final Uri foto = UserConfig.getFotoPath(this);
         if(foto != null){
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), foto);
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90);
-                final Bitmap bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            Picasso.with(this).load(foto).resize(100, 100).rotate(90).into(imagenDetail);
+            imagenDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dialog.dialogoFoto(MainActivity.this, foto);
+                }
+            });
 
-                imagenDetail.setImageBitmap(bmp);
-                imagenDetail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Dialog.dialogoFoto(MainActivity.this, bmp);
-                    }
-                });
-            }catch (Exception e){
-
-            }
         }else{
             imagenDetail.setImageDrawable(getResources().getDrawable(R.mipmap.coche_icon));
             imagenDetail.setOnClickListener(null);
