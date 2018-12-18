@@ -736,7 +736,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             imagenDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Dialog.dialogoFoto(MainActivity.this, foto);
+                    Dialog.dialogoFoto(MainActivity.this, foto,false);
                 }
             });
 

@@ -314,7 +314,7 @@ public class Dialog
         dialog.show();
 
     }
-    public static void dialogoFoto(final Context context, Uri foto){
+    public static void dialogoFoto(final Context context, Uri foto, boolean cambiar){
 
 
 
@@ -340,15 +340,21 @@ public class Dialog
             }
         });
 
-        cambiarFotoLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if(cambiar){
+            cambiarFotoLayout.setVisibility(View.VISIBLE);
+            cambiarFotoLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                GuardarInterface interfazFoto = (GuardarInterface) context;
-                interfazFoto.cambiarFoto();
-                dialog.dismiss();
-            }
-        });
+                    GuardarInterface interfazFoto = (GuardarInterface) context;
+                    interfazFoto.cambiarFoto();
+                    dialog.dismiss();
+                }
+            });
+        }else{
+            cambiarFotoLayout.setVisibility(View.GONE);
+        }
+
 
         dialog.show();
 

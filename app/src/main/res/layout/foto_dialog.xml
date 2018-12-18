@@ -13,6 +13,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:id="@+id/cerrarImagenLayout"
+            android:orientation="horizontal"
             android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
@@ -23,6 +24,17 @@
                 android:textSize="25dp"
                 android:textColor="@color/rojo"/>
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FOTO"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:textStyle="bold"
+            android:textColor="@color/gris"
+            android:textSize="22dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginTop="7dp"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="250dp"
