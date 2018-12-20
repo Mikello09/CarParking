@@ -153,8 +153,9 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                                     lineOptions.color(NavigationActivity.this.getColor(R.color.azul));
                                 }
                                 if(lineOptions == null){
-                                    mostrarEncontradoLayout();
+                                    //mostrarEncontradoLayout();
                                 }else{
+                                    map.clear();
                                     map.addPolyline(lineOptions);
                                     distanciaTexto.setText(distancia);
                                     tiempoTexto.setText(tiempo);
