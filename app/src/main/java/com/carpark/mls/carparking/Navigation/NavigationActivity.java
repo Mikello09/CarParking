@@ -60,7 +60,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     private boolean encontrado = false;
 
     private GoogleMap map;
-    private LocationManager mLocationManager;
+    private LocationManager lm;
     private String directionsApiKey = "AIzaSyDYExxjo__oIjI9cqwFkQt-2oq-kBfSdp8";
 
     Double lastLatitude = 0.0;
@@ -117,6 +117,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     public void configureMap(){
+        lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapaNavigation);
         mapFragment.getMapAsync(this);
@@ -182,7 +183,6 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
 
         map = googleMap;
-        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 
@@ -289,6 +289,16 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         }
     };
 
+    @Override
+    protected void onStop() {
+        lm.removeUpdates(locationListenerGPS);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000,0, locationListenerGPS);
+    }
 
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
         List<List<HashMap<String, String>>> routes = new ArrayList<>() ;

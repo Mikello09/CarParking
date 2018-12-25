@@ -49,6 +49,7 @@ public class CustomLocation {
                 locationManager.removeUpdates(locationListener);
             }
 
+
             public void onStatusChanged(String provider, int status, Bundle extras) {}
 
             public void onProviderEnabled(String provider) {}
@@ -58,6 +59,11 @@ public class CustomLocation {
         if (ContextCompat.checkSelfPermission( context, Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
 
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            Location lastLocationKnown = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if(lastLocationKnown != null){
+                interfazEspera.localizacion(lastLocationKnown);
+            }
+
         }
 
 
