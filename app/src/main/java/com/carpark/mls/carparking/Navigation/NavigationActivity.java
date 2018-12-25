@@ -160,6 +160,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                                     map.addPolyline(lineOptions);
                                     distanciaTexto.setText(distancia);
                                     tiempoTexto.setText(tiempo);
+                                    anadirMarkers();
                                 }
                             }
 
@@ -177,6 +178,24 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    private void anadirMarkers(){
+
+        LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
+        MarkerOptions markerCar = new MarkerOptions();
+        markerCar.position(carLocation).title("Coche");
+        markerCar.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_car));
+        map.addMarker(markerCar);
+
+
+        LatLng yoLocation = new LatLng(lastLatitude, lastLongitude);
+        MarkerOptions markerYo = new MarkerOptions();
+        markerYo.position(yoLocation).title("Yo");
+        markerYo.icon(BitmapDescriptorFactory.fromResource(R.mipmap.image_walking));
+
+        markerPersona = map.addMarker(markerYo);
+
     }
 
     @Override
@@ -291,6 +310,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
     @Override
     protected void onStop() {
+        super.onStop();
         lm.removeUpdates(locationListenerGPS);
     }
 
