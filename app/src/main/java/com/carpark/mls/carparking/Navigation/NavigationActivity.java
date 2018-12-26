@@ -281,7 +281,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
                 markerPersona = map.addMarker(markerYo);
 
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
+                //map.animateCamera(CameraUpdateFactory.newLatLngZoom(yoLocation, 16.0f));
                 directionsVolley();
 
 
