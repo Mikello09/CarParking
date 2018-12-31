@@ -1,6 +1,8 @@
 package com.carpark.mls.carparking.Navigation;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.DrawableRes;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -94,14 +97,14 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         onBind();
     }
 
-    public void onBind(){
-        distanciaTexto = (TextView)findViewById(R.id.distanciaTexto);
-        distanciaIcono = (TextView)findViewById(R.id.distanciaIcono);
-        tiempoTexto = (TextView)findViewById(R.id.tiempoTexto);
-        tiempoIcono = (TextView)findViewById(R.id.tiempoIcono);
+    public void onBind() {
+        distanciaTexto = (TextView) findViewById(R.id.distanciaTexto);
+        distanciaIcono = (TextView) findViewById(R.id.distanciaIcono);
+        tiempoTexto = (TextView) findViewById(R.id.tiempoTexto);
+        tiempoIcono = (TextView) findViewById(R.id.tiempoIcono);
 
-        distanciaIcono.setTypeface(Utils.setFont(NavigationActivity.this,"fontawesome",true));
-        tiempoIcono.setTypeface(Utils.setFont(NavigationActivity.this,"fontawesome",true));
+        distanciaIcono.setTypeface(Utils.setFont(NavigationActivity.this, "fontawesome", true));
+        tiempoIcono.setTypeface(Utils.setFont(NavigationActivity.this, "fontawesome", true));
     }
 
     @Override
@@ -110,22 +113,22 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         return true;
     }
 
-    public void getExtras(){
+    public void getExtras() {
 
         destinationLatitude = Double.parseDouble(getIntent().getExtras().getString("lat"));
         destinationLongitude = Double.parseDouble(getIntent().getExtras().getString("lng"));
     }
 
-    public void configureMap(){
-        lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+    public void configureMap() {
+        lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapaNavigation);
         mapFragment.getMapAsync(this);
     }
 
-    public void directionsVolley(){
+    public void directionsVolley() {
         RequestQueue queue = Volley.newRequestQueue(NavigationActivity.this);
-        String url ="https://maps.googleapis.com/maps/api/directions/json?origin=" + lastLatitude + "," + lastLongitude + "&destination=" + destinationLatitude + "," + destinationLongitude + "&mode=walking&sensor=false&key=" + directionsApiKey;
+        String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + lastLatitude + "," + lastLongitude + "&destination=" + destinationLatitude + "," + destinationLongitude + "&mode=walking&sensor=false&key=" + directionsApiKey;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -134,8 +137,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            List<List<HashMap<String,String>>> result = parse(jsonObject);
-                            if(primeraVez){
+                            List<List<HashMap<String, String>>> result = parse(jsonObject);
+                            if (primeraVez) {
                                 ArrayList<LatLng> points;
                                 PolylineOptions lineOptions = null;
                                 for (int i = 0; i < result.size(); i++) {
@@ -153,9 +156,9 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                                     lineOptions.width(10);
                                     lineOptions.color(NavigationActivity.this.getColor(R.color.azul));
                                 }
-                                if(lineOptions == null){
+                                if (lineOptions == null) {
                                     //mostrarEncontradoLayout();
-                                }else{
+                                } else {
                                     map.clear();
                                     map.addPolyline(lineOptions);
                                     distanciaTexto.setText(distancia);
@@ -164,15 +167,15 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                                 }
                             }
 
-                        }catch (JSONException e){
-                            Utils.showToast(NavigationActivity.this,"JSON ERROR: " + e.getMessage());
+                        } catch (JSONException e) {
+                            Utils.showToast(NavigationActivity.this, "JSON ERROR: " + e.getMessage());
                         }
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Utils.showToast(NavigationActivity.this,"ERROR: " + error.getMessage());
+                Utils.showToast(NavigationActivity.this, "ERROR: " + error.getMessage());
             }
         });
 
@@ -180,7 +183,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         queue.add(stringRequest);
     }
 
-    private void anadirMarkers(){
+    private void anadirMarkers() {
 
         LatLng carLocation = new LatLng(destinationLatitude, destinationLongitude);
         MarkerOptions markerCar = new MarkerOptions();
@@ -207,18 +210,30 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {}
+        } catch (Exception ex) {
+        }
 
         try {
             network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ex) {}
+        } catch (Exception ex) {
+        }
 
-        if(!gps_enabled || !network_enabled){
+        if (!gps_enabled || !network_enabled) {
 
-            Dialog.dialogoBase(NavigationActivity.this,"gpsMain",false,null);
+            Dialog.dialogoBase(NavigationActivity.this, "gpsMain", false, null);
 
-        }else{
+        } else {
 
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             map.setMyLocationEnabled(true);
             if (map != null) {
                 lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
@@ -265,11 +280,9 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                 directionsVolley();
             }else{
 
-                float distanciaCoche = calcularDistancia(lastLatitude,lastLongitude,destinationLatitude,destinationLongitude);
+                //float distanciaCoche = calcularDistancia(lastLatitude,lastLongitude,destinationLatitude,destinationLongitude);
                 //float distanciaPersona = calcularDistancia(lastLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
-                if(distanciaCoche <= 3) {
-                    mostrarEncontradoLayout();
-                }
+
 
                 if(markerPersona != null)
                     markerPersona.remove();
@@ -336,6 +349,10 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                 JSONObject duration = ((JSONObject)jLegs.get(0)).getJSONObject("duration");
                 tiempo = duration.getString("text");
 
+                if(Integer.parseInt(distance.get("value").toString()) <= 5) {
+                    mostrarEncontradoLayout();
+                }
+
                 List path = new ArrayList<>();
                 /** Traversing all legs */
                 for(int j=0;j<jLegs.length();j++){
@@ -373,6 +390,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         } catch (JSONException e) {
             e.printStackTrace();
         }catch (Exception e){
+            e.printStackTrace();
         }
         return routes;
     }
